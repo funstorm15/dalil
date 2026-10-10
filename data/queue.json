@@ -1,0 +1,1370 @@
+[
+ {
+  "case_id": "DE-00001",
+  "subject_name": "Sevara Yusupov",
+  "subject_kind": "person",
+  "branch": "Guliston",
+  "opened_at": "2026-07-04",
+  "n_tx": 61,
+  "score": 99.9,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-03",
+   "SC-04",
+   "SC-06"
+  ],
+  "labels": [
+   "mule_fanin"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00006",
+  "subject_name": "Rustam Xolmatov",
+  "subject_kind": "person",
+  "branch": "Buxoro",
+  "opened_at": "2026-07-03",
+  "n_tx": 44,
+  "score": 99.9,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-02",
+   "SC-04",
+   "SC-06"
+  ],
+  "labels": [
+   "pass_through"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00028",
+  "subject_name": "Otabek Volkov",
+  "subject_kind": "person",
+  "branch": "Buxoro",
+  "opened_at": "2026-07-04",
+  "n_tx": 39,
+  "score": 99.9,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-03",
+   "SC-04",
+   "SC-06"
+  ],
+  "labels": [
+   "mule_fanin"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00035",
+  "subject_name": "Farhod Mamatov",
+  "subject_kind": "person",
+  "branch": "Toshkent",
+  "opened_at": "2026-07-05",
+  "n_tx": 65,
+  "score": 99.9,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-03",
+   "SC-04",
+   "SC-06"
+  ],
+  "labels": [
+   "mule_fanin"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00042",
+  "subject_name": "Akmal Sharipov",
+  "subject_kind": "person",
+  "branch": "Xiva",
+  "opened_at": "2026-07-01",
+  "n_tx": 56,
+  "score": 99.9,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-02",
+   "SC-04",
+   "SC-06"
+  ],
+  "labels": [
+   "pass_through"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00053",
+  "subject_name": "Zoomalay MChJ",
+  "subject_kind": "business",
+  "branch": "Namangan",
+  "opened_at": "2026-07-01",
+  "n_tx": 39,
+  "score": 99.9,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-01",
+   "SC-02",
+   "SC-04"
+  ],
+  "labels": [
+   "structuring"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00060",
+  "subject_name": "Kamola Toshpo'latov",
+  "subject_kind": "person",
+  "branch": "Qarshi",
+  "opened_at": "2026-07-01",
+  "n_tx": 59,
+  "score": 99.9,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-03",
+   "SC-04",
+   "SC-06"
+  ],
+  "labels": [
+   "mule_fanin"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00061",
+  "subject_name": "Shahzoda Volkov",
+  "subject_kind": "person",
+  "branch": "Samarqand",
+  "opened_at": "2026-07-05",
+  "n_tx": 60,
+  "score": 99.9,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-01",
+   "SC-04",
+   "SC-06"
+  ],
+  "labels": [
+   "structuring"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00062",
+  "subject_name": "Temur Petrov",
+  "subject_kind": "person",
+  "branch": "Guliston",
+  "opened_at": "2026-07-04",
+  "n_tx": 56,
+  "score": 99.9,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-02",
+   "SC-04",
+   "SC-06"
+  ],
+  "labels": [
+   "pass_through"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00005",
+  "subject_name": "Gulnora Ochilov",
+  "subject_kind": "person",
+  "branch": "Termiz",
+  "opened_at": "2026-07-05",
+  "n_tx": 53,
+  "score": 94.9,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-04",
+   "SC-06"
+  ],
+  "labels": [
+   "mule_fanin"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00007",
+  "subject_name": "Zarafshon Farm MChJ",
+  "subject_kind": "business",
+  "branch": "Toshkent",
+  "opened_at": "2026-07-03",
+  "n_tx": 40,
+  "score": 94.9,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-01",
+   "SC-04"
+  ],
+  "labels": [
+   "structuring"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00019",
+  "subject_name": "Dmitriy Haydarov",
+  "subject_kind": "person",
+  "branch": "Termiz",
+  "opened_at": "2026-07-02",
+  "n_tx": 58,
+  "score": 94.9,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-01",
+   "SC-04"
+  ],
+  "labels": [
+   "structuring"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00023",
+  "subject_name": "Hazar Logistika MChJ",
+  "subject_kind": "business",
+  "branch": "Andijon",
+  "opened_at": "2026-07-05",
+  "n_tx": 44,
+  "score": 94.9,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-01",
+   "SC-04"
+  ],
+  "labels": [
+   "structuring"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00030",
+  "subject_name": "Hazar Logistika MKK",
+  "subject_kind": "business",
+  "branch": "Farg'ona",
+  "opened_at": "2026-07-05",
+  "n_tx": 36,
+  "score": 94.9,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-01",
+   "SC-04"
+  ],
+  "labels": [
+   "structuring"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00031",
+  "subject_name": "Otabek Yusupov",
+  "subject_kind": "person",
+  "branch": "Qarshi",
+  "opened_at": "2026-07-04",
+  "n_tx": 68,
+  "score": 94.9,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-01",
+   "SC-04"
+  ],
+  "labels": [
+   "structuring"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00047",
+  "subject_name": "Sherzod Sharipov",
+  "subject_kind": "person",
+  "branch": "Guliston",
+  "opened_at": "2026-07-05",
+  "n_tx": 44,
+  "score": 94.9,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-04",
+   "SC-06"
+  ],
+  "labels": [
+   "crypto_offramp"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00052",
+  "subject_name": "Zoomalay MChJ",
+  "subject_kind": "business",
+  "branch": "Toshkent",
+  "opened_at": "2026-07-05",
+  "n_tx": 43,
+  "score": 94.9,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-01",
+   "SC-04"
+  ],
+  "labels": [
+   "structuring"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00055",
+  "subject_name": "Temur Sattorov",
+  "subject_kind": "person",
+  "branch": "Toshkent",
+  "opened_at": "2026-07-04",
+  "n_tx": 59,
+  "score": 94.9,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-04",
+   "SC-06"
+  ],
+  "labels": [
+   "crypto_offramp"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00059",
+  "subject_name": "Argo Trans MChJ",
+  "subject_kind": "business",
+  "branch": "Nukus",
+  "opened_at": "2026-07-04",
+  "n_tx": 48,
+  "score": 94.9,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-01",
+   "SC-04"
+  ],
+  "labels": [
+   "structuring"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00064",
+  "subject_name": "Media Group MKK",
+  "subject_kind": "business",
+  "branch": "Namangan",
+  "opened_at": "2026-07-02",
+  "n_tx": 35,
+  "score": 94.9,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-01",
+   "SC-04"
+  ],
+  "labels": [
+   "structuring"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00072",
+  "subject_name": "Elena Ochilov",
+  "subject_kind": "person",
+  "branch": "Jizzax",
+  "opened_at": "2026-07-05",
+  "n_tx": 57,
+  "score": 94.9,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-04",
+   "SC-06"
+  ],
+  "labels": [
+   "crypto_offramp"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00075",
+  "subject_name": "Ultra Market MKK",
+  "subject_kind": "business",
+  "branch": "Jizzax",
+  "opened_at": "2026-07-05",
+  "n_tx": 31,
+  "score": 94.9,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-01",
+   "SC-04"
+  ],
+  "labels": [
+   "structuring"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00003",
+  "subject_name": "Islom Ochilov",
+  "subject_kind": "person",
+  "branch": "Guliston",
+  "opened_at": "2026-07-04",
+  "n_tx": 43,
+  "score": 93.6,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-01",
+   "SC-04"
+  ],
+  "labels": [
+   "structuring"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00065",
+  "subject_name": "Irina Gusev",
+  "subject_kind": "person",
+  "branch": "Nukus",
+  "opened_at": "2026-07-03",
+  "n_tx": 42,
+  "score": 93.6,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-02",
+   "SC-06"
+  ],
+  "labels": [
+   "pass_through"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00057",
+  "subject_name": "Nuria Agro MChJ",
+  "subject_kind": "business",
+  "branch": "Xiva",
+  "opened_at": "2026-07-05",
+  "n_tx": 40,
+  "score": 92.5,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-01",
+   "SC-02"
+  ],
+  "labels": [
+   "structuring"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00011",
+  "subject_name": "Doniyor Karimov",
+  "subject_kind": "person",
+  "branch": "Nukus",
+  "opened_at": "2026-07-01",
+  "n_tx": 46,
+  "score": 88.6,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-04",
+   "SC-06"
+  ],
+  "labels": [
+   "crypto_offramp"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00049",
+  "subject_name": "Temur Mirzayev",
+  "subject_kind": "person",
+  "branch": "Xiva",
+  "opened_at": "2026-07-03",
+  "n_tx": 59,
+  "score": 88.2,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-04",
+   "SC-06"
+  ],
+  "labels": [
+   "crypto_offramp"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00009",
+  "subject_name": "Irina Ibrohimov",
+  "subject_kind": "person",
+  "branch": "Termiz",
+  "opened_at": "2026-07-03",
+  "n_tx": 42,
+  "score": 87.7,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-02",
+   "SC-06"
+  ],
+  "labels": [
+   "pass_through"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00015",
+  "subject_name": "Zilola Popov",
+  "subject_kind": "person",
+  "branch": "Andijon",
+  "opened_at": "2026-07-05",
+  "n_tx": 38,
+  "score": 85.1,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-02",
+   "SC-06"
+  ],
+  "labels": [
+   "pass_through"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00025",
+  "subject_name": "Malika Sattorov",
+  "subject_kind": "person",
+  "branch": "Qarshi",
+  "opened_at": "2026-07-02",
+  "n_tx": 27,
+  "score": 83.4,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-06"
+  ],
+  "labels": [
+   "cycle_layering"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00032",
+  "subject_name": "Gulbahor Tursunov",
+  "subject_kind": "person",
+  "branch": "Andijon",
+  "opened_at": "2026-07-01",
+  "n_tx": 41,
+  "score": 83.4,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-06"
+  ],
+  "labels": [
+   "cycle_layering"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00034",
+  "subject_name": "Munisa Umarov",
+  "subject_kind": "person",
+  "branch": "Guliston",
+  "opened_at": "2026-07-01",
+  "n_tx": 51,
+  "score": 83.4,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-06"
+  ],
+  "labels": [
+   "pass_through"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00071",
+  "subject_name": "Nuria Agro MKK",
+  "subject_kind": "business",
+  "branch": "Toshkent",
+  "opened_at": "2026-07-02",
+  "n_tx": 36,
+  "score": 83.4,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-01"
+  ],
+  "labels": [
+   "structuring"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00079",
+  "subject_name": "Media Group MChJ",
+  "subject_kind": "business",
+  "branch": "Qarshi",
+  "opened_at": "2026-07-05",
+  "n_tx": 27,
+  "score": 83.4,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-01"
+  ],
+  "labels": [
+   "structuring"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00029",
+  "subject_name": "Kamola Mamatov",
+  "subject_kind": "person",
+  "branch": "Namangan",
+  "opened_at": "2026-07-01",
+  "n_tx": 38,
+  "score": 81.4,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-04"
+  ],
+  "labels": [
+   "pass_through"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00040",
+  "subject_name": "Rustam Nazarov",
+  "subject_kind": "person",
+  "branch": "Xiva",
+  "opened_at": "2026-07-01",
+  "n_tx": 43,
+  "score": 81.4,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-04"
+  ],
+  "labels": [
+   "pass_through"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00043",
+  "subject_name": "Akmal Xolmatov",
+  "subject_kind": "person",
+  "branch": "Xiva",
+  "opened_at": "2026-07-02",
+  "n_tx": 59,
+  "score": 81.4,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-04"
+  ],
+  "labels": [
+   "mule_fanin"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00074",
+  "subject_name": "Zilola Mirzayev",
+  "subject_kind": "person",
+  "branch": "Xiva",
+  "opened_at": "2026-07-02",
+  "n_tx": 38,
+  "score": 81.4,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-04"
+  ],
+  "labels": [
+   "mule_fanin"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00076",
+  "subject_name": "Sardor Gusev",
+  "subject_kind": "person",
+  "branch": "Farg'ona",
+  "opened_at": "2026-07-04",
+  "n_tx": 45,
+  "score": 81.4,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-04"
+  ],
+  "labels": [
+   "crypto_offramp"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00044",
+  "subject_name": "Gulnora Kuznetsov",
+  "subject_kind": "person",
+  "branch": "Termiz",
+  "opened_at": "2026-07-02",
+  "n_tx": 37,
+  "score": 81.1,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-02"
+  ],
+  "labels": [
+   "pass_through"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00000",
+  "subject_name": "Sergey Yusupov",
+  "subject_kind": "person",
+  "branch": "Nukus",
+  "opened_at": "2026-07-05",
+  "n_tx": 40,
+  "score": 80.6,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-06"
+  ],
+  "labels": [
+   "cycle_layering"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00002",
+  "subject_name": "Jurabek Orlov",
+  "subject_kind": "person",
+  "branch": "Namangan",
+  "opened_at": "2026-07-05",
+  "n_tx": 57,
+  "score": 78.7,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-06"
+  ],
+  "labels": [
+   "mule_fanin"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00066",
+  "subject_name": "Islom Umarov",
+  "subject_kind": "person",
+  "branch": "Andijon",
+  "opened_at": "2026-07-01",
+  "n_tx": 37,
+  "score": 75.3,
+  "risk_band": "critical",
+  "scenarios": [
+   "SC-06"
+  ],
+  "labels": [
+   "mule_fanin"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00012",
+  "subject_name": "Nodira Sokolov",
+  "subject_kind": "person",
+  "branch": "Jizzax",
+  "opened_at": "2026-07-03",
+  "n_tx": 47,
+  "score": 69.9,
+  "risk_band": "high",
+  "scenarios": [],
+  "labels": [
+   "cycle_layering"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00017",
+  "subject_name": "Zilola Popov",
+  "subject_kind": "person",
+  "branch": "Jizzax",
+  "opened_at": "2026-07-03",
+  "n_tx": 39,
+  "score": 69.9,
+  "risk_band": "high",
+  "scenarios": [],
+  "labels": [
+   "cycle_layering"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00027",
+  "subject_name": "Zulfiya Ergashev",
+  "subject_kind": "person",
+  "branch": "Jizzax",
+  "opened_at": "2026-07-04",
+  "n_tx": 31,
+  "score": 69.9,
+  "risk_band": "high",
+  "scenarios": [],
+  "labels": [
+   "cycle_layering"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00077",
+  "subject_name": "Jasur Gusev",
+  "subject_kind": "person",
+  "branch": "Jizzax",
+  "opened_at": "2026-07-02",
+  "n_tx": 39,
+  "score": 69.9,
+  "risk_band": "high",
+  "scenarios": [],
+  "labels": [
+   "mule_fanin"
+  ],
+  "is_suspicious": true
+ },
+ {
+  "case_id": "DE-00022",
+  "subject_name": "Otabek Tursunov",
+  "subject_kind": "person",
+  "branch": "Jizzax",
+  "opened_at": "2026-07-02",
+  "n_tx": 55,
+  "score": 24.8,
+  "risk_band": "low",
+  "scenarios": [
+   "SC-03",
+   "SC-06"
+  ],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00033",
+  "subject_name": "Binokor Savdo MKK",
+  "subject_kind": "business",
+  "branch": "Qarshi",
+  "opened_at": "2026-07-04",
+  "n_tx": 124,
+  "score": 19.6,
+  "risk_band": "low",
+  "scenarios": [
+   "SC-02",
+   "SC-06"
+  ],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00041",
+  "subject_name": "Temur Sokolov",
+  "subject_kind": "person",
+  "branch": "Guliston",
+  "opened_at": "2026-07-05",
+  "n_tx": 32,
+  "score": 17.0,
+  "risk_band": "low",
+  "scenarios": [
+   "SC-03",
+   "SC-06"
+  ],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00039",
+  "subject_name": "Gulnora Karimov",
+  "subject_kind": "person",
+  "branch": "Samarqand",
+  "opened_at": "2026-07-04",
+  "n_tx": 36,
+  "score": 16.6,
+  "risk_band": "low",
+  "scenarios": [
+   "SC-03",
+   "SC-06"
+  ],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00018",
+  "subject_name": "Islom Volkov",
+  "subject_kind": "person",
+  "branch": "Termiz",
+  "opened_at": "2026-07-03",
+  "n_tx": 48,
+  "score": 13.6,
+  "risk_band": "low",
+  "scenarios": [
+   "SC-06"
+  ],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00024",
+  "subject_name": "Eco Milk MChJ",
+  "subject_kind": "business",
+  "branch": "Andijon",
+  "opened_at": "2026-07-03",
+  "n_tx": 105,
+  "score": 13.6,
+  "risk_band": "low",
+  "scenarios": [
+   "SC-02"
+  ],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00046",
+  "subject_name": "Munisa Volkov",
+  "subject_kind": "person",
+  "branch": "Namangan",
+  "opened_at": "2026-07-01",
+  "n_tx": 39,
+  "score": 13.6,
+  "risk_band": "low",
+  "scenarios": [
+   "SC-06"
+  ],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00070",
+  "subject_name": "Jasur Ergashev",
+  "subject_kind": "person",
+  "branch": "Termiz",
+  "opened_at": "2026-07-01",
+  "n_tx": 45,
+  "score": 13.6,
+  "risk_band": "low",
+  "scenarios": [
+   "SC-06"
+  ],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00068",
+  "subject_name": "Dilrabo Sokolov",
+  "subject_kind": "person",
+  "branch": "Andijon",
+  "opened_at": "2026-07-03",
+  "n_tx": 30,
+  "score": 12.1,
+  "risk_band": "low",
+  "scenarios": [
+   "SC-06"
+  ],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00056",
+  "subject_name": "Ulug'bek Sokolov",
+  "subject_kind": "person",
+  "branch": "Buxoro",
+  "opened_at": "2026-07-03",
+  "n_tx": 31,
+  "score": 11.6,
+  "risk_band": "low",
+  "scenarios": [
+   "SC-06"
+  ],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00069",
+  "subject_name": "Gulbahor Kuznetsov",
+  "subject_kind": "person",
+  "branch": "Qarshi",
+  "opened_at": "2026-07-02",
+  "n_tx": 37,
+  "score": 9.8,
+  "risk_band": "low",
+  "scenarios": [
+   "SC-03"
+  ],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00054",
+  "subject_name": "Dilrabo Salimov",
+  "subject_kind": "person",
+  "branch": "Jizzax",
+  "opened_at": "2026-07-05",
+  "n_tx": 30,
+  "score": 9.1,
+  "risk_band": "low",
+  "scenarios": [
+   "SC-06"
+  ],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00078",
+  "subject_name": "Silk Road Trade MChJ",
+  "subject_kind": "business",
+  "branch": "Jizzax",
+  "opened_at": "2026-07-03",
+  "n_tx": 58,
+  "score": 9.1,
+  "risk_band": "low",
+  "scenarios": [
+   "SC-02"
+  ],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00051",
+  "subject_name": "Jasur Sokolov",
+  "subject_kind": "person",
+  "branch": "Qarshi",
+  "opened_at": "2026-07-01",
+  "n_tx": 33,
+  "score": 8.5,
+  "risk_band": "low",
+  "scenarios": [
+   "SC-06"
+  ],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00020",
+  "subject_name": "Shahzoda Umarov",
+  "subject_kind": "person",
+  "branch": "Namangan",
+  "opened_at": "2026-07-03",
+  "n_tx": 42,
+  "score": 7.3,
+  "risk_band": "low",
+  "scenarios": [
+   "SC-06"
+  ],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00014",
+  "subject_name": "Kamila Umarov",
+  "subject_kind": "person",
+  "branch": "Qarshi",
+  "opened_at": "2026-07-02",
+  "n_tx": 49,
+  "score": 6.5,
+  "risk_band": "low",
+  "scenarios": [
+   "SC-06"
+  ],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00036",
+  "subject_name": "Malika Gusev",
+  "subject_kind": "person",
+  "branch": "Jizzax",
+  "opened_at": "2026-07-02",
+  "n_tx": 30,
+  "score": 6.3,
+  "risk_band": "low",
+  "scenarios": [
+   "SC-06"
+  ],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00004",
+  "subject_name": "Doniyor Kuznetsov",
+  "subject_kind": "person",
+  "branch": "Xiva",
+  "opened_at": "2026-07-03",
+  "n_tx": 44,
+  "score": 5.6,
+  "risk_band": "low",
+  "scenarios": [
+   "SC-06"
+  ],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00037",
+  "subject_name": "Malika Haydarov",
+  "subject_kind": "person",
+  "branch": "Buxoro",
+  "opened_at": "2026-07-04",
+  "n_tx": 50,
+  "score": 5.5,
+  "risk_band": "low",
+  "scenarios": [
+   "SC-06"
+  ],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00045",
+  "subject_name": "Abdurahmon Kuznetsov",
+  "subject_kind": "person",
+  "branch": "Samarqand",
+  "opened_at": "2026-07-01",
+  "n_tx": 32,
+  "score": 4.6,
+  "risk_band": "low",
+  "scenarios": [
+   "SC-06"
+  ],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00008",
+  "subject_name": "Zilola Morozov",
+  "subject_kind": "person",
+  "branch": "Andijon",
+  "opened_at": "2026-07-05",
+  "n_tx": 36,
+  "score": 0.1,
+  "risk_band": "low",
+  "scenarios": [],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00010",
+  "subject_name": "Jurabek Petrov",
+  "subject_kind": "person",
+  "branch": "Namangan",
+  "opened_at": "2026-07-03",
+  "n_tx": 45,
+  "score": 0.1,
+  "risk_band": "low",
+  "scenarios": [],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00013",
+  "subject_name": "Otabek Zokirov",
+  "subject_kind": "person",
+  "branch": "Samarqand",
+  "opened_at": "2026-07-02",
+  "n_tx": 40,
+  "score": 0.1,
+  "risk_band": "low",
+  "scenarios": [],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00016",
+  "subject_name": "Sherzod Rahimov",
+  "subject_kind": "person",
+  "branch": "Samarqand",
+  "opened_at": "2026-07-03",
+  "n_tx": 45,
+  "score": 0.1,
+  "risk_band": "low",
+  "scenarios": [],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00021",
+  "subject_name": "Elena Vlasov",
+  "subject_kind": "person",
+  "branch": "Andijon",
+  "opened_at": "2026-07-03",
+  "n_tx": 42,
+  "score": 0.1,
+  "risk_band": "low",
+  "scenarios": [],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00026",
+  "subject_name": "Nuria Agro MKK",
+  "subject_kind": "business",
+  "branch": "Samarqand",
+  "opened_at": "2026-07-01",
+  "n_tx": 72,
+  "score": 0.1,
+  "risk_band": "low",
+  "scenarios": [],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00038",
+  "subject_name": "Zilola Sharipov",
+  "subject_kind": "person",
+  "branch": "Qarshi",
+  "opened_at": "2026-07-01",
+  "n_tx": 44,
+  "score": 0.1,
+  "risk_band": "low",
+  "scenarios": [],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00048",
+  "subject_name": "Zilola Sokolov",
+  "subject_kind": "person",
+  "branch": "Andijon",
+  "opened_at": "2026-07-03",
+  "n_tx": 30,
+  "score": 0.1,
+  "risk_band": "low",
+  "scenarios": [],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00050",
+  "subject_name": "Sergey Qodirov",
+  "subject_kind": "person",
+  "branch": "Namangan",
+  "opened_at": "2026-07-01",
+  "n_tx": 42,
+  "score": 0.1,
+  "risk_band": "low",
+  "scenarios": [],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00058",
+  "subject_name": "Bekzod Morozov",
+  "subject_kind": "person",
+  "branch": "Andijon",
+  "opened_at": "2026-07-05",
+  "n_tx": 29,
+  "score": 0.1,
+  "risk_band": "low",
+  "scenarios": [],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00063",
+  "subject_name": "Farhod Haydarov",
+  "subject_kind": "person",
+  "branch": "Buxoro",
+  "opened_at": "2026-07-02",
+  "n_tx": 40,
+  "score": 0.1,
+  "risk_band": "low",
+  "scenarios": [],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00067",
+  "subject_name": "Eco Milk MChJ",
+  "subject_kind": "business",
+  "branch": "Andijon",
+  "opened_at": "2026-07-02",
+  "n_tx": 56,
+  "score": 0.1,
+  "risk_band": "low",
+  "scenarios": [],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ },
+ {
+  "case_id": "DE-00073",
+  "subject_name": "Binokor Savdo MKK",
+  "subject_kind": "business",
+  "branch": "Toshkent",
+  "opened_at": "2026-07-01",
+  "n_tx": 59,
+  "score": 0.1,
+  "risk_band": "low",
+  "scenarios": [],
+  "labels": [
+   "clean"
+  ],
+  "is_suspicious": false
+ }
+]

@@ -1,0 +1,166 @@
+import { useEffect, useState } from "react";
+import { getAudit, getQueue } from "../api";
+import type { AuditEntry, QueueCase } from "../types";
+
+const BAND_ORDER: Record<string, number> = { critical: 0, high: 1, medium: 2, low: 3 };
+
+function bandColor(band: string | null): string {
+  switch (band) {
+    case "critical":
+      return "var(--critical)";
+    case "high":
+      return "var(--high)";
+    case "medium":
+      return "var(--medium)";
+    default:
+      return "var(--low)";
+  }
+}
+
+export default function QueueView({ onOpen }: { onOpen: (id: string) => void }) {
+  const [cases, setCases] = useState<QueueCase[]>([]);
+  const [audit, setAudit] = useState<AuditEntry[]>([]);
+  const [err, setErr] = useState("");
+  const [sort, setSort] = useState<"score" | "time">("score");
+
+  useEffect(() => {
+    getQueue()
+      .then(setCases)
+      .catch((e) => setErr(String(e)));
+    getAudit().then(setAudit).catch(() => undefined);
+  }, []);
+
+  const rows = [...cases].sort((a, b) => {
+    if (sort === "time") return (b.opened_at || "").localeCompare(a.opened_at || "");
+    const ba = BAND_ORDER[a.risk_band ?? "low"] ?? 4;
+    const bb = BAND_ORDER[b.risk_band ?? "low"] ?? 4;
+    if (ba !== bb) return ba - bb;
+    return (b.score ?? 0) - (a.score ?? 0);
+  });
+
+  const counts = {
+    critical: cases.filter((c) => c.risk_band === "critical").length,
+    high: cases.filter((c) => c.risk_band === "high").length,
+    medium: cases.filter((c) => c.risk_band === "medium").length,
+    low: cases.filter((c) => c.risk_band === "low").length,
+  };
+
+  return (
+    <>
+      <div className="title-line">
+        <h2>Alert queue</h2>
+        <span className="muted small">
+          pre-scored demo cases — click a row to open the investigation workspace
+        </span>
+        <div className="sep" />
+        <div className="chips">
+          <span className="badge critical">{counts.critical} critical</span>
+          <span className="badge high">{counts.high} high</span>
+          <span className="badge medium">{counts.medium} medium</span>
+          <span className="badge low">{counts.low} low</span>
+          <button className="btn ghost sm" onClick={() => setSort(sort === "score" ? "time" : "score")}>
+            sort: {sort === "score" ? "risk" : "newest"}
+          </button>
+        </div>
+      </div>
+
+      {err && <div className="note err">Backend unreachable: {err}</div>}
+
+      <div className="grid2" style={{ gridTemplateColumns: "1fr 320px" }}>
+        <div className="card" style={{ padding: "6px 14px 14px" }}>
+          <table className="q">
+            <thead>
+              <tr>
+                <th>Case</th>
+                <th>Subject</th>
+                <th>Branch</th>
+                <th>Txns</th>
+                <th>Rules hit</th>
+                <th style={{ width: 180 }}>DALIL score</th>
+                <th>Band</th>
+              </tr>
+            </thead>
+            <tbody>
+              {rows.map((c) => (
+                <tr key={c.case_id} onClick={() => onOpen(c.case_id)}>
+                  <td className="mono">{c.case_id}</td>
+                  <td>
+                    {c.subject_name}{" "}
+                    <span className="muted small">({c.subject_kind})</span>
+                  </td>
+                  <td>{c.branch}</td>
+                  <td className="mono">{c.n_tx}</td>
+                  <td className="mono small">{c.scenarios.join(" ") || "—"}</td>
+                  <td>
+                    <div className="center">
+                      <div className="scorebar" style={{ flex: 1 }}>
+                        <i
+                          style={{
+                            width: `${c.score ?? 0}%`,
+                            background: bandColor(c.risk_band),
+                          }}
+                        />
+                      </div>
+                      <span className="mono" style={{ width: 38, textAlign: "right" }}>
+                        {c.score ?? "—"}
+                      </span>
+                    </div>
+                  </td>
+                  <td>
+                    <span className={`badge ${c.risk_band ?? "neutral"}`}>{c.risk_band}</span>
+                  </td>
+                </tr>
+              ))}
+              {!rows.length && (
+                <tr>
+                  <td colSpan={7} className="muted">
+                    {err ? "—" : "loading…"}
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <div className="card">
+            <h3>Human-in-the-loop</h3>
+            <div className="note">
+              DALIL ranks and drafts; <b>a named analyst decides</b>. Every decision (dismiss /
+              escalate / STR) is appended to an audit log with the score, the rule hits and the
+              narrative-verification result.
+            </div>
+            <div style={{ marginTop: 10 }} className="small muted">
+              Session decisions so far: <b>{audit.length}</b>
+            </div>
+            <div className="evi-list" style={{ marginTop: 8, maxHeight: 240 }}>
+              {audit.map((a, i) => (
+                <div className="evi" key={i}>
+                  <span className="id">{a.case_id}</span>
+                  <span>
+                    <b>{a.decision}</b> · score {a.score} · {a.analyst}
+                    {a.note ? ` — “${a.note}”` : ""}
+                  </span>
+                </div>
+              ))}
+              {!audit.length && <div className="muted small">no decisions recorded yet</div>}
+            </div>
+          </div>
+          <div className="card">
+            <h3>
+              Why this queue exists
+              <span className="hint">the cost we remove</span>
+            </h3>
+            <div className="small muted" style={{ lineHeight: 1.7 }}>
+              L1 analysts open every monitoring alert by hand: load the account, export statements,
+              eyeball counterparties, retype findings into the case system. Industry benchmarks put
+              <b style={{ color: "var(--text)" }}> ~90% of alerts</b> as false positives and{" "}
+              <b style={{ color: "var(--text)" }}>20–40 min</b> of analyst time per alert.
+              DALIL pre-scores, explains and drafts — the analyst reviews instead of builds.
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}

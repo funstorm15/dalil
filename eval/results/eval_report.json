@@ -1,0 +1,286 @@
+{
+  "generated_by": "eval/run_eval.py",
+  "test": {
+    "n": 600,
+    "n_suspicious": 351,
+    "prevalence_in_sample": 0.585,
+    "model_roc_auc": 0.9945,
+    "model_pr_auc": 0.9962,
+    "model_ece": 0.008,
+    "ensemble_roc_auc": 0.9969,
+    "at_band_50": {
+      "model_at_prob_0_5": {
+        "precision": 0.9859,
+        "recall": 0.9972,
+        "fpr": 0.0201,
+        "tp": 350,
+        "fp": 5,
+        "tn": 244,
+        "fn": 1
+      },
+      "rules": {
+        "precision": 0.694,
+        "recall": 0.9174,
+        "fpr": 0.5703,
+        "tp": 322,
+        "fp": 142,
+        "tn": 107,
+        "fn": 29
+      },
+      "ensemble": {
+        "precision": 0.9859,
+        "recall": 0.9972,
+        "fpr": 0.0201,
+        "tp": 350,
+        "fp": 5,
+        "tn": 244,
+        "fn": 1
+      }
+    },
+    "ensemble_at_band50_precision_at_prevalence": {
+      "prevalence": 0.1,
+      "precision": 0.8466,
+      "recall": 0.9972,
+      "fpr": 0.0201
+    },
+    "per_typology": {
+      "structuring": {
+        "n": 98,
+        "rule_recall": 1.0,
+        "ensemble_recall@50": 0.99,
+        "ensemble_mean_score": 92.1
+      },
+      "pass_through": {
+        "n": 82,
+        "rule_recall": 0.89,
+        "ensemble_recall@50": 1.0,
+        "ensemble_mean_score": 87.0
+      },
+      "mule_fanin": {
+        "n": 75,
+        "rule_recall": 0.973,
+        "ensemble_recall@50": 1.0,
+        "ensemble_mean_score": 91.8
+      },
+      "crypto_offramp": {
+        "n": 56,
+        "rule_recall": 1.0,
+        "ensemble_recall@50": 1.0,
+        "ensemble_mean_score": 89.7
+      },
+      "cycle_layering": {
+        "n": 40,
+        "rule_recall": 0.55,
+        "ensemble_recall@50": 1.0,
+        "ensemble_mean_score": 75.6
+      },
+      "clean": {
+        "n": 249,
+        "rule_flag_rate": 0.57,
+        "ensemble_flag_rate@50": 0.02,
+        "ensemble_mean_score": 7.7
+      }
+    }
+  },
+  "novel_variants": {
+    "n": 600,
+    "n_suspicious": 359,
+    "prevalence_in_sample": 0.598,
+    "model_roc_auc": 0.9937,
+    "model_pr_auc": 0.9977,
+    "model_ece": 0.0059,
+    "ensemble_roc_auc": 0.9963,
+    "at_band_50": {
+      "model_at_prob_0_5": {
+        "precision": 0.9972,
+        "recall": 0.9916,
+        "fpr": 0.0041,
+        "tp": 356,
+        "fp": 1,
+        "tn": 240,
+        "fn": 3
+      },
+      "rules": {
+        "precision": 0.6698,
+        "recall": 0.7911,
+        "fpr": 0.5809,
+        "tp": 284,
+        "fp": 140,
+        "tn": 101,
+        "fn": 75
+      },
+      "ensemble": {
+        "precision": 0.9972,
+        "recall": 0.9916,
+        "fpr": 0.0041,
+        "tp": 356,
+        "fp": 1,
+        "tn": 240,
+        "fn": 3
+      }
+    },
+    "ensemble_at_band50_precision_at_prevalence": {
+      "prevalence": 0.1,
+      "precision": 0.9637,
+      "recall": 0.9916,
+      "fpr": 0.0041
+    },
+    "per_typology": {
+      "structuring": {
+        "n": 91,
+        "rule_recall": 0.912,
+        "ensemble_recall@50": 1.0,
+        "ensemble_mean_score": 88.7
+      },
+      "pass_through": {
+        "n": 92,
+        "rule_recall": 0.761,
+        "ensemble_recall@50": 0.967,
+        "ensemble_mean_score": 77.7
+      },
+      "mule_fanin": {
+        "n": 88,
+        "rule_recall": 0.67,
+        "ensemble_recall@50": 1.0,
+        "ensemble_mean_score": 78.1
+      },
+      "crypto_offramp": {
+        "n": 41,
+        "rule_recall": 1.0,
+        "ensemble_recall@50": 1.0,
+        "ensemble_mean_score": 88.6
+      },
+      "cycle_layering": {
+        "n": 47,
+        "rule_recall": 0.66,
+        "ensemble_recall@50": 1.0,
+        "ensemble_mean_score": 76.4
+      },
+      "clean": {
+        "n": 241,
+        "rule_flag_rate": 0.581,
+        "ensemble_flag_rate@50": 0.004,
+        "ensemble_mean_score": 6.9
+      }
+    }
+  },
+  "generalization": {
+    "note": "novel split holds typology variants never seen in training (different thresholds, delays, sender reuse)",
+    "model_auc_test": 0.9945,
+    "model_auc_novel": 0.9937,
+    "ensemble_recall_test": 0.9972,
+    "ensemble_recall_novel": 0.9916,
+    "rules_recall_test": 0.9174,
+    "rules_recall_novel": 0.7911
+  },
+  "latency": {
+    "pipeline_no_llm_ms": {
+      "p50": 108.0,
+      "p95": 180.9,
+      "max": 338.0,
+      "n": 60
+    },
+    "stage_p50_ms": {
+      "ingest": 0.82,
+      "entities": 15.37,
+      "features": 14.69,
+      "scenarios": 0.4,
+      "model": 77.12,
+      "score": 0.0,
+      "narrative": 0.01,
+      "verify": 0.07
+    }
+  },
+  "narrative": {
+    "mode": "llm",
+    "llm_available": true,
+    "llm_model": "dalil-qwen",
+    "sample_n": 20,
+    "mean_citation_precision": 0.95,
+    "invalid_citations_total": 0,
+    "unverified_numbers_total": 1,
+    "llm_latency_ms": {
+      "p50": 24874.0,
+      "n": 20
+    },
+    "avg_tokens": {
+      "prompt": 1206,
+      "completion": 324
+    }
+  },
+  "failures": {
+    "false_positives_at_50": [
+      {
+        "case_id": "TE-00382",
+        "label": "clean",
+        "ml": 0.999,
+        "score": 83.4,
+        "rules": [
+          "SC-06"
+        ],
+        "n_tx": 28,
+        "generator_variant": "base"
+      },
+      {
+        "case_id": "TE-00426",
+        "label": "clean",
+        "ml": 0.999,
+        "score": 83.4,
+        "rules": [
+          "SC-06"
+        ],
+        "n_tx": 30,
+        "generator_variant": "base"
+      },
+      {
+        "case_id": "TE-00141",
+        "label": "clean",
+        "ml": 0.9179,
+        "score": 71.5,
+        "rules": [
+          "SC-06"
+        ],
+        "n_tx": 24,
+        "generator_variant": "base"
+      },
+      {
+        "case_id": "TE-00206",
+        "label": "clean",
+        "ml": 0.8306,
+        "score": 63.9,
+        "rules": [
+          "SC-06"
+        ],
+        "n_tx": 28,
+        "generator_variant": "base"
+      },
+      {
+        "case_id": "TE-00479",
+        "label": "clean",
+        "ml": 0.6544,
+        "score": 59.3,
+        "rules": [
+          "SC-06"
+        ],
+        "n_tx": 30,
+        "generator_variant": "base"
+      }
+    ],
+    "false_negatives_at_50": [
+      {
+        "case_id": "TE-00570",
+        "label": "structuring",
+        "ml": 0.001,
+        "score": 23.8,
+        "rules": [
+          "SC-01",
+          "SC-06"
+        ],
+        "n_tx": 52,
+        "generator_variant": "base"
+      }
+    ],
+    "fp_count": 5,
+    "fn_count": 1
+  }
+}

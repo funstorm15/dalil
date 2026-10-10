@@ -1,0 +1,74 @@
+name: checks + deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  checks:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install backend deps
+        run: pip install -r requirements.txt pytest
+      - name: Lint
+        run: |
+          pip install ruff
+          ruff check .
+      - name: Unit tests
+        run: pytest -q
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+      - name: Frontend build
+        run: |
+          npm ci --prefix frontend --no-audit --no-fund
+          npm run build --prefix frontend
+
+  deploy:
+    needs: checks
+    runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
+    steps:
+      - uses: actions/checkout@v4
+      - name: Sync repository to Hugging Face Space
+        env:
+          HF_TOKEN: ${{ secrets.HF_TOKEN }}
+          HF_REPO: ${{ vars.HF_REPO }}
+        run: |
+          set -euo pipefail
+          if [ -z "${HF_TOKEN:-}" ] || [ -z "${HF_REPO:-}" ]; then
+            echo "HF_TOKEN secret / HF_REPO variable not configured — skipping deploy"
+            exit 0
+          fi
+          git config --global user.name "dalil-deploy"
+          git config --global user.email "dalil-deploy@users.noreply.huggingface.co"
+          rm -rf /tmp/space
+          if git clone "https://hf.co/${HF_REPO}" /tmp/space 2>/dev/null; then
+            echo "existing space found"
+          else
+            mkdir -p /tmp/space && git -C /tmp/space init
+          fi
+          rsync -a --delete \
+            --exclude .git --exclude .venv --exclude node_modules \
+            --exclude .github --exclude 'frontend/dist' \
+            ./ /tmp/space/
+          cd /tmp/space
+          { printf -- '---\nsdk: docker\napp_port: 7860\n---\n\n'; \
+            sed '1{/^---$/d;}' README.md; } > README.md.tmp && mv README.md.tmp README.md
+          git add -A
+          if git diff --cached --quiet; then
+            echo "no changes to deploy"
+            exit 0
+          fi
+          git commit -m "deploy ${GITHUB_SHA::12}"
+          git push
+          echo "pushed ${GITHUB_SHA::12} to HF_REPO=${HF_REPO}"

@@ -1,0 +1,14 @@
+{
+  "version": "dalil-gbm-1.0.0",
+  "trained_at": "2026-10-10T10:27:28.200042+00:00",
+  "train_n": 1440,
+  "val_n": 360,
+  "val_pos_rate": 0.58,
+  "val_roc_auc": 1.0,
+  "val_pr_auc": 1.0,
+  "val_ece": 0.001,
+  "operating_threshold": 0.999,
+  "target_fpr": 0.15,
+  "feature_count": 49,
+  "train_seconds": 30.2
+}
