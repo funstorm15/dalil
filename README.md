@@ -7,7 +7,7 @@
 > **DALIL turns that into a 220-word, fully cited investigation note in ~20 seconds —
 > on-premises, with the data never leaving the bank.**
 
-`DEPLOY_URL_PLACEHOLDER` · Repo: this page · Deck: `docs/` (pitch PPTX)
+**Live demo:** https://cornbread-left-licking.ngrok-free.dev · Repo: this page
 
 ---
 
@@ -63,8 +63,9 @@ deterministic extractive narrative **and labels it as such** — never a silent 
 
 ## 4. Try it
 
-Live deployment: `DEPLOY_URL_PLACEHOLDER` (Hugging Face Space, CPU, ~20 s first load while the
-model warms).
+Live deployment: **https://cornbread-left-licking.ngrok-free.dev** (demo tier — the stack runs on
+the demo laptop and is exposed through an ngrok tunnel; first browser visit shows ngrok's
+interstitial, click "Visit Site". Narratives take ~20–25 s on 2 CPU threads.)
 
 Local:
 
@@ -151,8 +152,9 @@ data/generator/      synthetic casebook generator (seed 20261010)
 scripts/             train, build_queue, download_llm, entrypoint
 eval/                run_eval.py → eval_report.json + system_facts.json
 tests/               18 unit/API tests (pytest) · ruff clean
-Dockerfile           multi-stage: builds SPA, installs API, fetches model → HF Space
-.github/workflows/   checks (pytest+ruff+build) then sync to HF Space
+Dockerfile           multi-stage: builds SPA, installs API, fetches model (HF Space / anywhere)
+scripts/run_demo.sh  demo stack as systemd user units + ngrok tunnel
+.github/workflows/   checks (pytest+ruff+build) then sync to an HF Space (if configured)
 ```
 
 ## 10. Track & team
