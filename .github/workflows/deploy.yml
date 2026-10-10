@@ -51,11 +51,16 @@ jobs:
           fi
           git config --global user.name "dalil-deploy"
           git config --global user.email "dalil-deploy@users.noreply.huggingface.co"
+          HF_USER="${HF_REPO%%/*}"
+          AUTH_URL="https://${HF_USER}:${HF_TOKEN}@huggingface.co/spaces/${HF_REPO}"
           rm -rf /tmp/space
-          if git clone "https://hf.co/${HF_REPO}" /tmp/space 2>/dev/null; then
+          if git clone "$AUTH_URL" /tmp/space 2>/dev/null; then
             echo "existing space found"
           else
-            mkdir -p /tmp/space && git -C /tmp/space init
+            echo "space repo not found remotely — will create on first push"
+            mkdir -p /tmp/space
+            git -C /tmp/space init -b main
+            git -C /tmp/space remote add origin "$AUTH_URL"
           fi
           rsync -a --delete \
             --exclude .git --exclude .venv --exclude node_modules \
@@ -70,5 +75,5 @@ jobs:
             exit 0
           fi
           git commit -m "deploy ${GITHUB_SHA::12}"
-          git push
+          git push origin HEAD:main
           echo "pushed ${GITHUB_SHA::12} to HF_REPO=${HF_REPO}"
