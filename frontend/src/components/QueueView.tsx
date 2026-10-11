@@ -66,8 +66,8 @@ export default function QueueView({ onOpen }: { onOpen: (id: string) => void }) 
 
       {err && <div className="note err">Backend unreachable: {err}</div>}
 
-      <div className="grid2" style={{ gridTemplateColumns: "1fr 320px" }}>
-        <div className="card" style={{ padding: "6px 14px 14px" }}>
+      <div className="grid2 queue-layout">
+        <div className="card queue-table">
           <table className="q">
             <thead>
               <tr>
@@ -83,7 +83,7 @@ export default function QueueView({ onOpen }: { onOpen: (id: string) => void }) 
             <tbody>
               {rows.map((c) => (
                 <tr key={c.case_id} onClick={() => onOpen(c.case_id)}>
-                  <td className="mono">{c.case_id}</td>
+                  <td className="mono"><button className="case-link" onClick={(event) => { event.stopPropagation(); onOpen(c.case_id); }}>{c.case_id}</button></td>
                   <td>
                     {c.subject_name}{" "}
                     <span className="muted small">({c.subject_kind})</span>

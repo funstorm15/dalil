@@ -94,3 +94,7 @@ were reused, and its standardized size indices are not mixed with UZS amounts.
 ## DEMO identity migration
 
 All 3,080 supplied cases use explicit DEMO identities. Data was synthetic from the start; this is relabelling, not anonymisation of real bank records. Earlier Git commits and downloaded copies retain the old synthetic labels. Historical LLM quality and latency measurements predate relabelling and the prompt edit. Features/rules are rechecked separately; the model was not retrained.
+
+## V2 interface and scale
+
+Casebook adds light/dark mode and 10/15-row display pagination. Evidence navigation changes pages automatically. Full-case parsing and analysis remain unchanged; CSV uploads are capped at 2 MB. Do not claim million-row support.

@@ -20,12 +20,12 @@ model:
 llm:  ## fetch runtime + default (1.5b) model; MODEL=3b for the larger one
 	bash scripts/download_llm.sh
 
-serve:  ## API + SPA on :8000 (needs `make llm` + llama-server running for narratives)
-	$(PY) -m uvicorn app.main:app --app-dir backend --reload --port 8000
+serve:  ## V2 API + SPA on :8012
+	bash scripts/run_demo.sh
 
-llm-serve:  ## run the local model server on :8081
+llm-serve:  ## run the local model server on :18081
 	./llama.cpp/dist/llama-server -m model/dalil-llm.Q4_K_M.gguf --alias dalil-qwen \
-	  --host 127.0.0.1 --port 8081 -c 4096 -t 8
+	  --host 127.0.0.1 --port 18081 -c 4096 -t 8
 
 web:
 	cd frontend && npm run build

@@ -1,4 +1,4 @@
-# DALIL — AML investigation copilot (hackathon prototype, synthetic data)
+# DALIL V2 — AML investigation copilot (hackathon prototype, synthetic data)
 
 **Proposed pilot client:** MKBANK Financial Crime Compliance — partnership **not** confirmed.
 Context: Central Bank of Uzbekistan AML/CFT reporting.
@@ -10,6 +10,16 @@ Context: Central Bank of Uzbekistan AML/CFT reporting.
 
 **Live demo:** https://cornbread-left-licking.ngrok-free.dev — the presenter's laptop behind an
 ngrok tunnel, **synthetic data only**, not a bank environment (first visit: click "Visit Site").
+
+## V2 release
+
+Casebook interface with light/dark appearance, saved theme choice, and 10/15-row
+transaction pages. Evidence links open the page containing the source transaction.
+Pagination limits rendered rows only: analysis still uses the complete case and the
+CSV upload limit remains 2 MB. Million-row ingestion is not supported.
+
+The original submitted V1 is preserved under the `v1-hackathon-submitted` Git tag.
+The public demo now serves V2. See `VERSION-2.md` for deployment details.
 
 ---
 
@@ -55,11 +65,11 @@ Paste a CSV (or pick a synthetic demo case) → a live stage-streamed UI shows:
                   → scenario rules SC-01..06 ─┐
                   → HistGB risk model ────────┴→ score (0.7·ML + 0.3·rules)
                   → evidence list → template note → note checks
-                  → optional llama.cpp :8081 draft (local GGUF) → note checks
+                  → optional llama.cpp :18081 draft (local GGUF) → note checks
                   → analysis record (data/analyses/<analysis_id>.json)
                   → decision log (data/audit/audit.log, JSONL, not tamper-proof)
                   SSE stage stream ─▶ React SPA (queue / investigate / system)
-  public demo: ngrok tunnel → 127.0.0.1:8002
+  public demo: ngrok tunnel → 127.0.0.1:8012
 ```
 
 No external AI API is called. We have **not** audited all outbound traffic of the host or the
@@ -70,15 +80,22 @@ Design notes: [`docs/architecture.md`](docs/architecture.md).
 ## 4. Run it
 
 ```bash
-make setup          # venv + pip + npm ci
-make llm            # llama.cpp + Qwen2.5-1.5B GGUF (~1 GB, Apache-2.0)
-cd frontend && npm run build && cd ..
-bash scripts/run_demo.sh                 # llama + API (+ ngrok if configured) as systemd user units
-RESTART_API=1 bash scripts/run_demo.sh   # after a code change
+make setup          # Python 3.12 + uv/pip; Node 24 is used by CI
+make llm            # downloads optional llama.cpp runtime and Qwen weights
+npm run build --prefix frontend
+bash scripts/run_demo.sh  # API + frontend at http://127.0.0.1:8012
 ```
 
-`run_demo.sh` uses *transient* user units: they restart on crash but **not** after a reboot —
-run the script again. Without the LLM, everything works except the experimental draft.
+For the optional LLM draft, run `make llm-serve` in a second terminal (port 18081).
+The local launcher does not create or modify a public tunnel. Keep both terminals
+running. Without the LLM, scoring, template notes, decisions and exports still work.
+Tests: `OMP_NUM_THREADS=1 make test` and `npm test --prefix frontend` (Node 24).
+
+The presenter's public tunnel is an existing ngrok agent. Its endpoint can be switched
+with `python scripts/switch_endpoint.py --port 8012` after V2 is running. This helper
+is specific to the presenter's domain; other users should start their own tunnel.
+A laptop reboot stops these local processes. See `VERSION-2.md` for restart instructions.
+
 Docker: the Dockerfile builds one image (API + SPA + LLM); mount
 `-v dalil-analyses:/app/data/analyses -v dalil-audit:/app/data/audit` or analyses and
 decisions are lost when the container is replaced.

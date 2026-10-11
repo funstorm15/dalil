@@ -1,4 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from "react";
+import { pageWindow, pageForIndex } from "../pagination";
 import {
   SAMPLE_CSV,
   analyze,
@@ -18,7 +19,7 @@ import type {
 } from "../types";
 
 // only ids + form text live in the browser; results are re-fetched from the server
-const SESSION_KEY = "dalil:session:v2";
+const SESSION_KEY = "dalil:development-v2:session";
 
 const STAGE_LABEL: Record<string, string> = {
   ingest: "ingest · parse",
@@ -172,6 +173,15 @@ export default function InvestigateView({
   const [wall, setWall] = useState<number | null>(null);
   const [hlEv, setHlEv] = useState("");
   const [hlTx, setHlTx] = useState("");
+  const [txPage, setTxPage] = useState(0);
+  const [txPageSize, setTxPageSize] = useState(10);
+  const [focusRequest, setFocusRequest] = useState(0);
+  const txWindow = pageWindow(result?.transactions.length ?? 0, txPageSize, txPage);
+
+  // Wait for React to mount the selected page before scrolling to its evidence row.
+  useEffect(() => {
+    if (hlTx) document.getElementById(`tx-${hlTx}`)?.scrollIntoView({ behavior: "smooth", block: "center" });
+  }, [hlTx, txWindow.page, txPageSize, focusRequest]);
   const [analyst, setAnalyst] = useState("");
   const [note, setNote] = useState("");
   const [decisions, setDecisions] = useState<AuditEntry[]>([]);
@@ -181,11 +191,13 @@ export default function InvestigateView({
   const [verify, setVerify] = useState<VerifyResult | null>(null);
   const stagesRef = useRef<StageEvent[]>([]);
   const restoredMode = useRef<string | null>(null);
+  const currentMode = useRef(mode);
+  currentMode.current = mode;
 
   useEffect(() => {
     getCases().then((c) => {
       setCases(c);
-      if (!caseId && c.length) onCaseChange(c[0].case_id);
+      if (!caseId && c.length && currentMode.current === "case") onCaseChange(c[0].case_id);
     });
   }, [caseId, onCaseChange]);
 
@@ -240,6 +252,7 @@ export default function InvestigateView({
   }, [result, mode, caseId, csv, analyst, note, amountFormat]);
 
   const run = async () => {
+    setTxPage(0);
     setRunning(true);
     setError("");
     setResult(null);
@@ -329,10 +342,11 @@ export default function InvestigateView({
   }, [result]);
 
   const focusTx = (txId: string) => {
+    const index = result?.transactions.findIndex((t) => t.id === txId) ?? -1;
+    if (index < 0) return;
+    setTxPage(pageForIndex(index, txPageSize));
     setHlTx(txId);
-    requestAnimationFrame(() =>
-      document.getElementById(`tx-${txId}`)?.scrollIntoView({ behavior: "smooth", block: "center" }),
-    );
+    setFocusRequest((value) => value + 1);
   };
 
   const focusEvidence = (id: string) => {
@@ -747,6 +761,29 @@ export default function InvestigateView({
                     row = selected evidence
                   </span>
                 </h3>
+                <div className="transaction-pagination" aria-label="Transaction pagination">
+                  <span aria-live="polite">
+                    Showing {result.transactions.length ? txWindow.start + 1 : 0}–{txWindow.end} of {result.transactions.length.toLocaleString()} transactions
+                  </span>
+                  <label>
+                    Rows per page
+                    <select value={txPageSize} onChange={(event) => {
+                      const size = Number(event.target.value);
+                      setTxPage(pageForIndex(txWindow.start, size));
+                      setTxPageSize(size);
+                    }}>
+                      <option value={10}>10</option>
+                      <option value={15}>15</option>
+                    </select>
+                  </label>
+                  <nav aria-label="Transaction pages">
+                    <button className="btn ghost sm" disabled={txWindow.page === 0} onClick={() => setTxPage(0)}>First</button>
+                    <button className="btn ghost sm" disabled={txWindow.page === 0} onClick={() => setTxPage(txWindow.page - 1)}>Previous</button>
+                    <span>Page {txWindow.page + 1} of {txWindow.pageCount.toLocaleString()}</span>
+                    <button className="btn ghost sm" disabled={txWindow.page === txWindow.pageCount - 1} onClick={() => setTxPage(txWindow.page + 1)}>Next</button>
+                    <button className="btn ghost sm" disabled={txWindow.page === txWindow.pageCount - 1} onClick={() => setTxPage(txWindow.pageCount - 1)}>Last</button>
+                  </nav>
+                </div>
                 <div className="scrollY">
                   <table className="data">
                     <thead>
@@ -761,7 +798,7 @@ export default function InvestigateView({
                       </tr>
                     </thead>
                     <tbody>
-                      {result.transactions.map((t) => {
+                      {result.transactions.slice(txWindow.start, txWindow.end).map((t) => {
                         const cp = t.direction === "in" ? t.from_name : t.to_name;
                         return (
                           <tr key={t.id} className={hlTx === t.id ? "hl" : ""} id={`tx-${t.id}`}>

@@ -145,7 +145,7 @@ export default function SystemView() {
             </div>
             <div className="card">
               <h3>Per-typology coverage (test)</h3>
-              <table className="data">
+              <div className="scrollY"><table className="data">
                 <thead>
                   <tr>
                     <th>typology</th>
@@ -166,7 +166,7 @@ export default function SystemView() {
                     </tr>
                   ))}
                 </tbody>
-              </table>
+              </table></div>
             </div>
           </div>
         )}
@@ -230,7 +230,7 @@ export default function SystemView() {
               Data sources & licences
               <span className="hint">required by the challenge rules</span>
             </h3>
-            <table className="data">
+            <div className="scrollY"><table className="data">
               <thead>
                 <tr>
                   <th>source</th>
@@ -254,7 +254,7 @@ export default function SystemView() {
                   </tr>
                 )}
               </tbody>
-            </table>
+            </table></div>
           </div>
 
           <div className="card">

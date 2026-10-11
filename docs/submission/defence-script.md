@@ -5,13 +5,14 @@ Live demo budget: **≈100 s**, minute 1:15 → 2:55. Demo case: **New CSV → "
 **83.4 / critical**, **SC-01 structuring hit** (10 deposits of 42–50 mln UZS from 10 senders),
 SC-03 and SC-06 **NOT EVALUATED** (metadata missing), recommendation **PROVISIONAL**.
 
-Before the slot: `bash scripts/run_demo.sh` (after any reboot) → open
-https://cornbread-left-licking.ngrok-free.dev → "Visit Site". Run the template case once to
-warm up. Backup: `localhost:8002` (same UI). `DALIL-demo-backup.mp4` is a 40-second silent
-walkthrough assembled from fresh screenshots of the real public UI (11 October, DEMO labels).
-It is visibly labelled as an edited screenshot walkthrough, NOT a continuous recording.
-The browser tool did not expose continuous recording. The old video with realistic synthetic
-names is archived locally and is not the current backup. The live 100-second demo remains primary.
+Before the slot, open https://cornbread-left-licking.ngrok-free.dev and run the template
+case once. The live demo serves V2 (Casebook UI, light/dark themes, 10/15-row pages).
+Local fallback: http://127.0.0.1:8012. Keep the API, LLM and ngrok processes running.
+After reboot: start the LLM with `make llm-serve`, start the API with
+`bash scripts/run_demo.sh`, then start ngrok against port 8012. Do not run the V1 launcher.
+The included V2 backup MP4 is a silent, edited walkthrough made from actual UI screenshots,
+explicitly labelled NOT continuous video. It supports the live demo, not a substitute
+for a measured end-to-end timing demonstration.
 
 
 ---
@@ -40,7 +41,7 @@ hash, and exports a package it builds from its own record."
 |---|---|---|
 | 0–10 s | Investigate → **New CSV** → **load template** → (LLM draft box **unchecked** for speed) → **Run investigation** | "A new synthetic case: 12 transactions, no customer metadata." |
 | 10–25 s | stage trace, gauge **83 critical**, SC-01 hit | "SC-01 structuring: ten deposits of 42–50 million from ten senders. The account age and declared turnover were not provided — DALIL does not invent them: SC-03 and SC-06 say NOT EVALUATED and the recommendation is PROVISIONAL." |
-| 25–45 s | note → click a transaction citation `[E#]` | "Every line cites evidence. Click a citation — the source transaction is highlighted in the table. The badges are separate: citation IDs exist, numbers and dates match the cited evidence, meaning NOT machine-verified." |
+| 25–45 s | note → click a transaction citation `[E#]` | "Every line cites evidence. Click a citation — the source transaction is highlighted on the correct table page. Pages show 10 or 15 rows; this is display pagination, not million-row ingestion. The badges are separate: citation IDs exist, numbers and dates match the cited evidence, meaning NOT machine-verified." |
 | 45–65 s | type analyst name + justification → **Escalate L2** | "The decision needs a name and a justification. The name is typed, not authenticated — we say so in the UI. Score and checks come from the server record." |
 | 65–80 s | **reload the page** → Investigate | "Reload: the result and the decision come back from the server, by analysis id." |
 | 80–100 s | **Export package** | "Export is built by the server. Two answers: integrity — hashes consistent; and match with this server's record. A hash is not a signature: someone holding the whole file can rewrite content and hashes — that is why the server-match check exists." |
@@ -48,7 +49,7 @@ hash, and exports a package it builds from its own record."
 If time allows / in Q&A: terminal `python scripts/verify_export.py <file>` → OK; edit one
 amount → FAIL with the section name. (Tamper check is CLI-only, not in the UI.)
 
-Fallbacks: tunnel down → `localhost:8002`. LLM down → pill says "LLM offline · template note
+Fallbacks: tunnel down → `localhost:8012`. LLM down → pill says "LLM offline · template note
 only"; nothing else changes. Demo laptop rebooted → `bash scripts/run_demo.sh`.
 
 ## 2:55–4:00 · Results (synthetic, reproducible: `eval/run_eval.py`)
