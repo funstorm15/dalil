@@ -194,12 +194,5 @@ docs/submission/    deck (PPTX/PDF), 7-minute defence script, Q&A
 
 ## 10. Track & team
 
-FinTech / AI in Finance. Built solo in the hackathon window, with AI coding assistance;
+FinTech / AI in Finance. Built with a team in the hackathon, with AI coding assistance;
 synthetic-data declaration per challenge rules.
-
-## Final submission materials
-
-Use `docs/submission/DALIL-FINAL.pdf` (or editable `DALIL-FINAL.pptx`) for submission.
-The earlier `DALIL-hackathon-2026.*` files are archived drafts and are superseded.
-Use `docs/submission/defence-script.md` for rehearsal and `DALIL-demo-backup.mp4` as a silent backup.
-No final dashboard submission is performed by this release preparation.
