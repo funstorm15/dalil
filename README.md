@@ -133,14 +133,23 @@ they copy evidence text).
 **Failures** (published in the System tab): 5 false positives and 1 false
 negatives at band 50 on the test split.
 
-## 6. Cost model (assumptions)
+## 6. Pilot budget and payback (illustrative assumptions)
 
-| | |
+No bank has validated these costs or benefits. This is a planning scenario, not a quotation.
+
+| Item | Assumption |
 |---|---|
-| External AI API fees per case | **$0** — local open weights. Not "free": hardware and staff cost remain |
-| Hardware (estimate) | ~$55/month small GPU or CPU node |
-| Analyst time saved | **assumption, no pilot**: 4 000 alerts × 30 min × $15/h ≈ $30 000/month |
-| Binding constraint | model-risk validation and regulator sign-off |
+| External AI API fees | $0; hardware and people still cost money |
+| One-off pilot | $6,000: 200 labour hours x $25 = $5,000; infrastructure $200; data review $500; reserve $300 |
+| Monthly capacity value | 4,000 alerts x 5 minutes / 60 x $15/hour x 50% realisation = $2,500 |
+| Monthly operating cost | $500 (support, infrastructure and maintenance allowance) |
+| Net monthly benefit | $2,000; capacity value is not automatically a cash saving |
+| Simple payback | 3 months after rollout; excludes the pilot duration |
+| Sensitivity | At 2,000 alerts/month: $750 net/month and 8 months payback |
+
+Start with a four-week workflow study using 50 authorised cases inside a bank. Measure
+review time, corrections and missed evidence. This sample cannot establish a low FPR;
+a larger independent holdout, data mapping, security review and model validation are required.
 
 ## 7. Data & licences
 
@@ -187,3 +196,10 @@ docs/submission/    deck (PPTX/PDF), 7-minute defence script, Q&A
 
 FinTech / AI in Finance. Built solo in the hackathon window, with AI coding assistance;
 synthetic-data declaration per challenge rules.
+
+## Final submission materials
+
+Use `docs/submission/DALIL-FINAL.pdf` (or editable `DALIL-FINAL.pptx`) for submission.
+The earlier `DALIL-hackathon-2026.*` files are archived drafts and are superseded.
+Use `docs/submission/defence-script.md` for rehearsal and `DALIL-demo-backup.mp4` as a silent backup.
+No final dashboard submission is performed by this release preparation.

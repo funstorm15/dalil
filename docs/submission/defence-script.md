@@ -7,8 +7,9 @@ SC-03 and SC-06 **NOT EVALUATED** (metadata missing), recommendation **PROVISION
 
 Before the slot: `bash scripts/run_demo.sh` (after any reboot) → open
 https://cornbread-left-licking.ngrok-free.dev → "Visit Site". Run the template case once to
-warm up. Backup: `localhost:8000` (same UI) · backup video `DALIL-demo-backup.mp4` (53 s, silent screen capture of
-the same flow on an isolated local instance with the LLM draft on; recorded 11 Oct 07:17).
+warm up. Backup: `localhost:8000` (same UI) · backup video `DALIL-demo-backup.mp4` (about 51 s, silent screen capture on an isolated local instance with the LLM draft on;
+recorded 11 Oct 07:17, edited to remove the obsolete queue benchmark text).
+This is an edited local backup, not a fresh recording of the public demo.
 
 ---
 
@@ -25,8 +26,8 @@ laundering variants. Alert volumes and minutes per alert in our cost slide are
 "DALIL takes a case CSV or a queue alert and gives one screen: an explainable 0–100 score
 (70% calibrated model + 30% typology rules), the rule hits with their transactions, and an
 investigation note built **only from the evidence list**. A local open-weight LLM can add an
-**experimental draft** — no external AI API is called. Every claim's number is checked against
-the evidence it cites; the **meaning** is not machine-checked — that is the analyst's job.
+**experimental draft** — no external AI API is called. Supported numerical formats are checked against
+the evidence cited in the same sentence; the **meaning** is not machine-checked — that is the analyst's job.
 The analyst decides; the server keeps the decision bound to that exact analysis and input
 hash, and exports a package it builds from its own record."
 
@@ -70,18 +71,22 @@ is labelled experimental. We do not claim hallucination-free output."
    fixed at inference, model not retrained, eval re-run.
 We did **not** reuse code, data or weights from the Tahlil reference material (it has no licence file).
 
-## 5:00–5:45 · Business & cost (assumptions)
+## 5:00–5:45 · Business & cost (all figures illustrative)
 
-"MKBANK FCC is a **proposed** pilot client, not a confirmed partner. No external AI API fee
-per case — but hardware (~$55/month estimate) and analyst time remain; $0 API ≠ free. The
-$30k/month saving is arithmetic on assumed volumes (4 000 alerts × 30 min × $15/h) — no pilot
-has measured it."
+"Our proposed owner is the MKBANK FCC alert-investigation desk; no partnership is confirmed.
+A pilot budget of $6,000 assumes 200 labour hours at $25, $200 infrastructure, $500 data review
+and $300 contingency. At 4,000 alerts monthly, five minutes saved, $15 per hour and 50% useful
+realisation, capacity value is $2,500 monthly. After $500 operating cost, the scenario yields
+$2,000 net and three months payback after rollout. At half the volume, payback rises to eight
+months. These are assumptions, not measured savings or a commercial quote."
 
 ## 5:45–6:30 · Pilot ask
 
-"A 4-week pilot on anonymised real alerts inside the bank's own environment, measuring:
-FPR at fixed recall, minutes per alert, and note-check pass rate on real cases. Production
-needs a separate bank deployment, security review and model-risk validation."
+"We propose a four-week workflow pilot with 50 authorised cases inside the bank, measuring
+review time, factual corrections and missed evidence. Fifty cases cannot establish a low FPR;
+detection quality needs a larger independent holdout. Production requires data mapping,
+authentication, secure storage and model validation. Our current differentiation is a compact
+local workflow with UZS and RU/UZ handling; we do not claim a proven barrier to copying."
 
 ## 6:30–7:00 · Close
 

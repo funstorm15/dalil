@@ -153,11 +153,9 @@ export default function QueueView({ onOpen }: { onOpen: (id: string) => void }) 
               <span className="hint">the cost we remove</span>
             </h3>
             <div className="small muted" style={{ lineHeight: 1.7 }}>
-              L1 analysts open every monitoring alert by hand: load the account, export statements,
-              eyeball counterparties, retype findings into the case system. Industry benchmarks put
-              <b style={{ color: "var(--text)" }}> ~90% of alerts</b> as false positives and{" "}
-              <b style={{ color: "var(--text)" }}>20–40 min</b> of analyst time per alert.
-              DALIL pre-scores, explains and drafts — the analyst reviews instead of builds.
+              Analysts inspect transactions, check counterparties and document the reasons for a decision.
+              DALIL organises evidence and prepares a template note for review.
+              Time savings and alert volumes are pilot assumptions, not measured bank outcomes.
             </div>
           </div>
         </div>

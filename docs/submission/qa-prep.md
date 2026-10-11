@@ -50,8 +50,7 @@ security and egress review, DR and model-risk validation.
 **Q: "No data leaves"?** What we can say: the LLM runs locally and no external AI API is called.
 We have not audited all outbound traffic of the host or the tunnel.
 
-**Q: $0 cost?** $0 external AI API fees. Hardware (~$55/month estimate) and people cost remain.
-The $30k/month saving is an assumption-based model, not a measurement.
+**Q: Costs and ROI?** $0 external AI API fees does not mean free operation. The final deck uses an illustrative $6,000 pilot budget and $500/month operations. Assumed 4,000 alerts/month, five minutes saved, $15/hour and 50% realisation give $2,000/month net capacity value and three months payback after rollout. At half the volume, eight months. No pilot has measured this; capacity value is not necessarily cash savings.
 
 **Q: LLM down?** The template note is unaffected; the UI says "LLM offline · template note
 only" and the draft card says no draft.
@@ -82,8 +81,10 @@ server uses its stored result. Tests cover forged score/evidence/decision/analys
 prefix names (Temur/Temurbek) do not merge; an initial merges only if it resolves to exactly
 one person in the case.
 
-**Q: Tests?** 91 pytest tests + a browser end-to-end run (new CSV → evidence → decision
-→ reload → export → verify; second case; bad input; LLM down).
+**Q: Tests?** 91 pytest tests (fresh release run: 91 passed), lint and frontend build.
+Automated tests cover input validation, LLM failures and decision/export integrity.
+Public-browser release checks are recorded separately in the release checklist; do not
+present local/API checks or automated tests as a phone test.
 
 **Q: Did you copy the Tahlil reference?** No. It has no licence file; no code, data or weights
 were reused, and its standardized size indices are not mixed with UZS amounts.
