@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { pageWindow, pageForIndex } from "../pagination";
 import { getAudit, getQueue } from "../api";
 import type { AuditEntry, QueueCase } from "../types";
 
@@ -22,6 +23,10 @@ export default function QueueView({ onOpen }: { onOpen: (id: string) => void }) 
   const [audit, setAudit] = useState<AuditEntry[]>([]);
   const [err, setErr] = useState("");
   const [sort, setSort] = useState<"score" | "time">("score");
+
+  const [page, setPage] = useState(0);
+  const [pageSize, setPageSize] = useState(10);
+  const window = pageWindow(cases.length, pageSize, page);
 
   useEffect(() => {
     getQueue()
@@ -58,7 +63,7 @@ export default function QueueView({ onOpen }: { onOpen: (id: string) => void }) 
           <span className="badge high">{counts.high} high</span>
           <span className="badge medium">{counts.medium} medium</span>
           <span className="badge low">{counts.low} low</span>
-          <button className="btn ghost sm" onClick={() => setSort(sort === "score" ? "time" : "score")}>
+          <button className="btn ghost sm" onClick={() => { setSort(sort === "score" ? "time" : "score"); setPage(0); }}>
             sort: {sort === "score" ? "risk" : "newest"}
           </button>
         </div>
@@ -68,6 +73,26 @@ export default function QueueView({ onOpen }: { onOpen: (id: string) => void }) 
 
       <div className="grid2 queue-layout">
         <div className="card queue-table">
+          <div className="transaction-pagination" aria-label="Alert queue pagination">
+            <span aria-live="polite">Showing {rows.length ? window.start + 1 : 0}–{window.end} of {rows.length.toLocaleString()} cases</span>
+            <label>Cases per page
+              <select value={pageSize} onChange={(event) => {
+                const size = Number(event.target.value);
+                setPage(pageForIndex(window.start, size));
+                setPageSize(size);
+              }}>
+                <option value={10}>10</option>
+                <option value={15}>15</option>
+              </select>
+            </label>
+            <nav aria-label="Alert queue pages">
+              <button className="btn ghost sm" disabled={window.page === 0} onClick={() => setPage(0)}>First</button>
+              <button className="btn ghost sm" disabled={window.page === 0} onClick={() => setPage(window.page - 1)}>Previous</button>
+              <span>Page {window.page + 1} of {window.pageCount.toLocaleString()}</span>
+              <button className="btn ghost sm" disabled={window.page === window.pageCount - 1} onClick={() => setPage(window.page + 1)}>Next</button>
+              <button className="btn ghost sm" disabled={window.page === window.pageCount - 1} onClick={() => setPage(window.pageCount - 1)}>Last</button>
+            </nav>
+          </div>
           <table className="q">
             <thead>
               <tr>
@@ -81,7 +106,7 @@ export default function QueueView({ onOpen }: { onOpen: (id: string) => void }) 
               </tr>
             </thead>
             <tbody>
-              {rows.map((c) => (
+              {rows.slice(window.start, window.end).map((c) => (
                 <tr key={c.case_id} onClick={() => onOpen(c.case_id)}>
                   <td className="mono"><button className="case-link" onClick={(event) => { event.stopPropagation(); onOpen(c.case_id); }}>{c.case_id}</button></td>
                   <td>

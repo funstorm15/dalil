@@ -4,7 +4,7 @@ DALIL is a synthetic AML (anti-money-laundering) investigation prototype. It hel
 
 ## What each screen means
 
-- **Alert queue:** synthetic cases ordered by risk. Open a case to investigate it.
+- **Alert queue:** synthetic cases ordered by risk, shown 10 or 15 per page. First/Previous/Next/Last navigate cases; changing sort returns to page 1. Risk totals always cover the full queue. Open a case to investigate it.
 - **Investigate:** select a demo case or paste/upload a CSV. The built-in template contains 12 synthetic transactions. Amount parsing is strict; missing customer metadata produces a provisional result.
 - **Pipeline trace:** shows processing stages and their elapsed times.
 - **DALIL score:** a 0–100 prioritisation score combining a calibrated model (70%) and scenario rules (30%). It is not the probability that a person committed a crime.

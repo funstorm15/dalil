@@ -53,3 +53,7 @@ on port 8013 and retargets the running ngrok agent. The agent must already be up
 `scripts/switch_endpoint.py --port 8012` (or 8013) verifies V2 before switching,
 saves the old endpoint settings, verifies the public build, and rolls back on failure.
 Local servers and the ngrok agent must remain running for the public URL to work.
+
+## Alert queue pagination
+
+The queue also shows 10/15 cases per page, with First/Previous/Next/Last. Sorting applies to the entire queue before pagination and resets to page 1. Risk totals cover all cases. Queue pagination is display-only; the API still returns the full queue.
