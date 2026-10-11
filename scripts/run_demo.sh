@@ -5,14 +5,14 @@
 #   stop:   systemctl --user stop dalil-llama dalil-api dalil-ngrok
 # Transient units restart on crash (Restart=always) but do NOT survive a reboot or
 # logout — run this script again after the machine restarts.
-# Env: PORT (default 8000), LLM_THREADS (default 4), NGROK_BIN, NGROK_AUTHTOKEN (once).
+# Env: PORT (default 8002), LLM_THREADS (default 4), NGROK_BIN, NGROK_AUTHTOKEN (once).
 # The API runs with OMP_NUM_THREADS=1: single-case model calls are ~4x faster without
 # OpenMP thread fan-out on this laptop (measured 11 Oct).
 # Data: decisions -> data/audit/audit.log, analyses -> data/analyses/ (on this disk).
 set -euo pipefail
 cd "$(dirname "$0")/.."
 ROOT="$PWD"
-PORT="${PORT:-8000}"
+PORT="${PORT:-8002}"
 LOGDIR="${LOGDIR:-/tmp/dalil-demo}"
 mkdir -p "$LOGDIR" "$ROOT/data/audit" "$ROOT/data/analyses"
 systemctl --user reset-failed dalil-llama dalil-api dalil-ngrok 2>/dev/null || true

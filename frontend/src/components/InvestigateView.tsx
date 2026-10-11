@@ -671,7 +671,7 @@ export default function InvestigateView({
                     <input
                       type="text"
                       value={analyst}
-                      placeholder="e.g. D. Aliyeva"
+                      placeholder="e.g. Synthetic QA"
                       onChange={(e) => setAnalyst(e.target.value)}
                       style={{ marginTop: 4 }}
                     />

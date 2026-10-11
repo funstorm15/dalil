@@ -7,9 +7,12 @@ SC-03 and SC-06 **NOT EVALUATED** (metadata missing), recommendation **PROVISION
 
 Before the slot: `bash scripts/run_demo.sh` (after any reboot) → open
 https://cornbread-left-licking.ngrok-free.dev → "Visit Site". Run the template case once to
-warm up. Backup: `localhost:8000` (same UI) · backup video `DALIL-demo-backup.mp4` (about 51 s, silent screen capture on an isolated local instance with the LLM draft on;
-recorded 11 Oct 07:17, edited to remove the obsolete queue benchmark text).
-This is an edited local backup, not a fresh recording of the public demo.
+warm up. Backup: `localhost:8002` (same UI). `DALIL-demo-backup.mp4` is a 40-second silent
+walkthrough assembled from fresh screenshots of the real public UI (11 October, DEMO labels).
+It is visibly labelled as an edited screenshot walkthrough, NOT a continuous recording.
+The browser tool did not expose continuous recording. The old video with realistic synthetic
+names is archived locally and is not the current backup. The live 100-second demo remains primary.
+
 
 ---
 
@@ -45,7 +48,7 @@ hash, and exports a package it builds from its own record."
 If time allows / in Q&A: terminal `python scripts/verify_export.py <file>` → OK; edit one
 amount → FAIL with the section name. (Tamper check is CLI-only, not in the UI.)
 
-Fallbacks: tunnel down → `localhost:8000`. LLM down → pill says "LLM offline · template note
+Fallbacks: tunnel down → `localhost:8002`. LLM down → pill says "LLM offline · template note
 only"; nothing else changes. Demo laptop rebooted → `bash scripts/run_demo.sh`.
 
 ## 2:55–4:00 · Results (synthetic, reproducible: `eval/run_eval.py`)
@@ -54,7 +57,7 @@ only"; nothing else changes. Demo laptop rebooted → `bash scripts/run_demo.sh`
 0.4% at band 50 with recall 99.7% / 99.2%; rules-only FPR
 57.0% / 58.1%. Precision at an **assumed** 10% prevalence:
 96.4% on novel — an assumption, not bank data.
-LLM drafts, n=20: 0/20 drafts had zero check issues; citation IDs existed
+Historical LLM drafts before DEMO relabelling, n=20: 0/20 drafts had zero check issues; citation IDs existed
 95.0%; numbers matched cited evidence 20.0%; 2/20 truncated; latency p50
 19 s on 4 CPU threads. That is why the **template** note is primary and the LLM draft
 is labelled experimental. We do not claim hallucination-free output."

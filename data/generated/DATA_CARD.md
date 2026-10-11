@@ -80,3 +80,7 @@ Messy amount strings use the generator's convention: `.` groups thousands (`"1.2
 3 196 of 139 534 amounts (2.3%, all below 1 mln UZS). Inference now reads them correctly; the
 model was not retrained for this release, and the eval report was re-run with the corrected
 parser.
+
+## Explicit demo identities (11 October 2026)
+
+All bundled person/company names now use DEMO labels. Accounts and phone fields use non-routable DEMO-ACCOUNT / DEMO-PHONE tokens. They are not real-world identifiers. Stable labels preserve entity relationships within each case. The 3080 supplied cases retain identical 49 inference features and rule outputs after migration; see eval/results/privacy_validation.json. The published metrics use these supplied files. The updated generator emits explicit demo labels for future datasets; regenerating a different dataset requires reevaluation. Existing training weights were not retrained. LLM and latency measurements were made before renaming and are historical.

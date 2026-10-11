@@ -59,7 +59,7 @@ Paste a CSV (or pick a synthetic demo case) → a live stage-streamed UI shows:
                   → analysis record (data/analyses/<analysis_id>.json)
                   → decision log (data/audit/audit.log, JSONL, not tamper-proof)
                   SSE stage stream ─▶ React SPA (queue / investigate / system)
-  public demo: ngrok tunnel → 127.0.0.1:8000
+  public demo: ngrok tunnel → 127.0.0.1:8002
 ```
 
 No external AI API is called. We have **not** audited all outbound traffic of the host or the
@@ -120,7 +120,7 @@ corrected amount parser (see Limitations 2).
 ★ the novel split holds typology parameters never seen in training. Precision@prevalence
 applies the measured TPR/FPR to an assumed 10% base rate — a planning assumption.
 
-**Experimental LLM drafts** (Qwen2.5-1.5B Q4, n=20 held-out test cases, 4 CPU threads,
+**Historical experimental LLM drafts (before DEMO relabelling)** (Qwen2.5-1.5B Q4, n=20 held-out test cases, 4 CPU threads,
 checked by `core/verifier.py`): 0/20 drafts with zero check issues; citation IDs existing
 95.0%; numbers/amounts/dates matching the cited evidence 20.0%; unsupported
 17, miscited 53, uncited 159 values in total; 2/20 truncated;
@@ -128,7 +128,7 @@ latency p50 19 s, p95 27 s. **Meaning is not measured.** This is why the
 template note is primary. Template notes: 20/20 consistent by the same checks (expected —
 they copy evidence text).
 
-**Latency** (no LLM): pipeline p50 189 ms / p95 310 ms on a 16-core laptop in power-saver mode with `OMP_NUM_THREADS=1` (as `run_demo.sh` runs the API; with default OpenMP threads the same machine measured p50 830 ms). LLM draft latency above was measured on the same laptop.
+**Historical latency (before DEMO relabelling)** (no LLM): pipeline p50 189 ms / p95 310 ms on a 16-core laptop in power-saver mode with `OMP_NUM_THREADS=1` (as `run_demo.sh` runs the API; with default OpenMP threads the same machine measured p50 830 ms). LLM draft latency above was measured on the same laptop.
 
 **Failures** (published in the System tab): 5 false positives and 1 false
 negatives at band 50 on the test split.
@@ -153,7 +153,7 @@ a larger independent holdout, data mapping, security review and model validation
 
 ## 7. Data & licences
 
-- **Synthetic casebook** (`data/generated/`, 3 880 cases, CC0): `data/generator/generate.py`,
+- **Synthetic casebook** (`data/generated/`, 3 080 cases, CC0): `data/generator/generate.py`,
   no real personal or bank data — [`DATA_CARD.md`](data/generated/DATA_CARD.md),
   [`LICENCE-DATA.md`](data/generated/LICENCE-DATA.md). Hand-written test fixtures in
   `tests/fixtures/` are synthetic too.
@@ -201,5 +201,11 @@ synthetic-data declaration per challenge rules.
 
 Use `docs/submission/DALIL-FINAL.pdf` (or editable `DALIL-FINAL.pptx`) for submission.
 The earlier `DALIL-hackathon-2026.*` files are archived drafts and are superseded.
-Use `docs/submission/defence-script.md` for rehearsal and `DALIL-demo-backup.mp4` as a silent backup.
+Use `docs/submission/defence-script.md` for rehearsal and `DALIL-demo-backup.mp4` as a silent, explicitly labelled screenshot-walkthrough backup (40 seconds, not a continuous screen recording).
 No final dashboard submission is performed by this release preparation.
+
+## Demonstration identities
+
+Bundled people and companies use explicit `DEMO Person` / `DEMO Company` labels. Account and phone values use `DEMO-ACCOUNT-...` / `DEMO-PHONE-...`, not routable identifiers. There is no real-person lookup behind case IDs. The existing casebook was relabelled while preserving all 49 inference features and rule outputs (see `eval/results/privacy_validation.json`). Newly generated datasets must be evaluated separately. Historical LLM/latency metrics predate the label migration.
+
+Earlier commits and downloaded copies retain the former synthetic labels. This release does not rewrite Git history. Relabelling is not anonymisation of real customer data, and does not guarantee that a label cannot occur elsewhere.

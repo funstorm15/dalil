@@ -26,11 +26,11 @@ from app.core.verifier import verify_narrative  # noqa: E402
 
 DEAD_LLM = LLMClient(base_url="http://127.0.0.1:1/v1", model="none")
 HDR = "ts,amount,direction,counterparty_name,counterparty_kind,channel,memo\n"
-CSV_A = HDR + ("01.05.2026 10:00,45 000 000,in,Aziza Rahimova,person,cash_in,\n"
-               "02.05.2026 11:00,30 000 000,out,Bekzod Tursunov,person,p2p,qarz\n"
-               "03.05.2026 12:00,47 000 000,in,Dilshod Aliyev,person,cash_in,\n")
-CSV_B = HDR + ("05.05.2026 09:00,12 000 000,in,Kamola Yusupova,person,p2p,\n"
-               "06.05.2026 10:00,9 000 000,out,Savdo Markaz MChJ,business,wire,tovar\n")
+CSV_A = HDR + ("01.05.2026 10:00,45 000 000,in,DEMO Person TEST-A,person,cash_in,\n"
+               "02.05.2026 11:00,30 000 000,out,DEMO Person TEST-B,person,p2p,qarz\n"
+               "03.05.2026 12:00,47 000 000,in,DEMO Person TEST-C,person,cash_in,\n")
+CSV_B = HDR + ("05.05.2026 09:00,12 000 000,in,DEMO Person TEST-D,person,p2p,\n"
+               "06.05.2026 10:00,9 000 000,out,DEMO Company ALPHA MChJ,business,wire,tovar\n")
 
 
 def _result(resp_text: str) -> dict:
@@ -62,7 +62,7 @@ def _analyze_csv(client, text, **kw) -> dict:
 
 def _decide(client, aid, decision="escalate", note="near-threshold cash inflows"):
     return client.post("/api/decision", json={"analysis_id": aid, "decision": decision,
-                                              "analyst": "Dilnoza A.", "note": note})
+                                              "analyst": "Synthetic QA", "note": note})
 
 
 # ---------------- 1. evidence counterparty ----------------
@@ -70,8 +70,8 @@ def test_evidence_names_counterparty_for_incoming_and_outgoing():
     case = case_from_csv(CSV_A, case_id="CSV-T")
     res, _ = analyze(case.model_dump(), llm=DEAD_LLM, want_narrative=False)
     tx_ev = {e.ref: e.text for e in res.evidence if e.kind == "transaction"}
-    assert "from Aziza Rahimova via cash_in" in tx_ev["row-1"]  # incoming: sender
-    assert "to Bekzod Tursunov via p2p" in tx_ev["row-2"]  # outgoing: recipient
+    assert "from DEMO Person TEST-A via cash_in" in tx_ev["row-1"]  # incoming: sender
+    assert "to DEMO Person TEST-B via p2p" in tx_ev["row-2"]  # outgoing: recipient
     for text in tx_ev.values():
         assert "Subject account" not in text
 

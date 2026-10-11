@@ -78,7 +78,7 @@ server uses its stored result. Tests cover forged score/evidence/decision/analys
 ## Engineering
 
 **Q: Entity resolution?** Union-find on account/name/phone with guards: surname-only and
-prefix names (Temur/Temurbek) do not merge; an initial merges only if it resolves to exactly
+prefix names (Testveks/Testvekslong) do not merge; an initial merges only if it resolves to exactly
 one person in the case.
 
 **Q: Tests?** 91 pytest tests (fresh release run: 91 passed), lint and frontend build.
@@ -90,3 +90,7 @@ present local/API checks or automated tests as a phone test.
 were reused, and its standardized size indices are not mixed with UZS amounts.
 
 **Q: Biggest open risk?** Synthetic-to-real drift and model-risk validation — pilot questions.
+
+## DEMO identity migration
+
+All 3,080 supplied cases use explicit DEMO identities. Data was synthetic from the start; this is relabelling, not anonymisation of real bank records. Earlier Git commits and downloaded copies retain the old synthetic labels. Historical LLM quality and latency measurements predate relabelling and the prompt edit. Features/rules are rechecked separately; the model was not retrained.

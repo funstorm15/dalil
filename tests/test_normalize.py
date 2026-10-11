@@ -31,16 +31,21 @@ def test_date_formats():
 
 
 def test_names_transliteration_and_variants():
-    assert norm_name("Temur Karimov") == "temur karimov"
-    assert norm_name("Темур Каримов") == "temur karimov"
-    assert norm_name("Savdo Markaz MChJ") == "savdo markaz"
-    assert names_match("Temur Karimov", "temur karimov")
-    assert names_match("Temur Karimov", "T. Karimov")
-    assert names_match("Abdurahmon Karimov", "Абдурахмон Каримов")
-    assert not names_match("Temur Karimov", "Dilnoza Yusupova")
+    assert names_match("DEMO Person A001", "DEMO Person A001")
+    assert not names_match("DEMO Person A001", "DEMO Person A002")
+    assert not names_match("DEMO Company A001", "DEMO Company A002")
+    assert norm_name("Testveks Kazlum") == "testveks kazlum"
+    assert norm_name("Тествекс Казлум") == "testveks kazlum"
+    assert norm_name("DEMO Company ALPHA MChJ") == "demo company alpha"
+    assert names_match("Testveks Kazlum", "testveks kazlum")
+    assert names_match("Testveks Kazlum", "T. Kazlum")
+    assert names_match("Avekslum Kazlum", "Авекслум Казлум")
+    assert not names_match("Testveks Kazlum", "Pexlum Qexlum")
 
 
 def test_phone_normalization():
+    assert norm_phone("DEMO-PHONE-ALPHA") == "DEMO-PHONE-ALPHA"
+    assert norm_phone("DEMO-PHONE-BETA") != norm_phone("DEMO-PHONE-ALPHA")
     assert norm_phone("+998 90 123 45 67") == "+998901234567"
     assert norm_phone("901234567") == "+998901234567"
 

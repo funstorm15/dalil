@@ -79,27 +79,29 @@ export default function SystemView() {
           />
           <Metric
             v={lat.pipeline_no_llm_ms?.p50 ?? "—"}
-            l="pipeline p50 (ms)"
+            l="historical pipeline p50 (ms)"
             s={`p95 ${lat.pipeline_no_llm_ms?.p95 ?? "—"} ms, no LLM`}
           />
           <Metric
             v={lat.pipeline_no_llm_ms ? `${(lat.pipeline_no_llm_ms.p95 / 1000).toFixed(2)} s` : "—"}
-            l="p95 end-to-end, no LLM"
+            l="historical p95, no LLM"
             s="deterministic stages"
           />
           <Metric
             v={nar.drafts_fully_consistent != null ? `${nar.drafts_fully_consistent}/${nar.sample_n}` : "—"}
-            l="LLM drafts with 0 check issues"
+            l="historical LLM drafts with 0 check issues"
             s={`IDs exist ${nar.mean_citation_id_share ?? "—"} · numbers ${nar.mean_numeric_consistency ?? "—"} · meaning not checked`}
           />
           <Metric
             v={nar.llm_latency_ms ? `${(nar.llm_latency_ms.p50 / 1000).toFixed(1)} s` : "—"}
-            l="LLM draft latency p50"
+            l="historical LLM draft latency p50"
             s={nar.llm_latency_ms ? `p95 ${(nar.llm_latency_ms.p95 / 1000).toFixed(1)} s · ${nar.truncated ?? 0} truncated` : ""}
           />
           <Metric v={tr.val_ece ?? "—"} l="calibration ECE (val)" s="isotonic-calibrated" />
           <Metric v={fail.fp_count ?? "—"} l="known FPs @ band 50" s="see failure list below" />
         </div>
+
+        <p className="muted small">LLM quality and latency were measured before DEMO relabelling and the prompt edit. These are historical results, not a fresh measurement on the current labels.</p>
 
         {Object.keys(gen).length > 0 && (
           <div className="note" style={{ marginTop: 12 }}>
@@ -183,7 +185,7 @@ export default function SystemView() {
             </div>
             <div className="box">
               <b>2 · Entity resolution</b> — union-find over account / normalised name / phone;
-              transliteration-aware (Темур Каримов = Temur Karimov), ambiguity-guarded
+              transliteration-aware, ambiguity-guarded; bundled data uses explicit DEMO labels.
             </div>
             <div className="box">
               <b>3 · Features</b> — 49 analyst-readable features (threshold proximity, drain speed,

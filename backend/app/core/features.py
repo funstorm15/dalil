@@ -19,7 +19,7 @@ REPORTING_THRESHOLD = 50_000_000  # UZS, cash-operations reporting threshold
 def build_entity_clusters(case: CaseRecord) -> dict[str, str]:
     """Resolve counterparty identity across spelling variants.
 
-    Same person can appear as "Temur Karimov", "temur karimov", "T. Karimov"
+    Same person can appear as "Testveks Kazlum", "testveks kazlum", "T. Kazlum"
     (Latin/Cyrillic mixed in UZ/RU data) or under two accounts sharing one
     phone. Union-find over: account, normalized name, phone.
     """
@@ -79,10 +79,10 @@ def name_merge_ok(na: str, nb: str, key_a: str, key_b: str,
     """Nameship decision with an ambiguity guard for abbreviated names.
 
     Full names merge like normalize.names_match (transliteration / subset /
-    similarity). An abbreviated name ("T. Karimov") merges only when its
+    similarity). An abbreviated name ("T. Kazlum") merges only when its
     initial resolves to exactly one distinct person-name in this case among
-    nodes sharing a non-initial token — if both "Temur Karimov" and
-    "Temurbek Karimov" are present, nothing merges with "T. Karimov".
+    nodes sharing a non-initial token — if both "Testveks Kazlum" and
+    "Testvekslong Kazlum" are present, nothing merges with "T. Kazlum".
     Candidates are counted by distinct normalized name, so spelling variants
     of one person do not create false ambiguity.
     """

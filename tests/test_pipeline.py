@@ -95,9 +95,9 @@ def test_turnover_mismatch_rule():
 # ---------------- entity resolution ----------------
 def test_entity_cluster_merges_transliteration_variants():
     txs = [
-        _tx(0, 1_000_000, "in", "Temur Karimov"),
-        _tx(1, 1_000_000, "in", "Темур Каримов"),
-        _tx(2, 1_000_000, "in", "T. Karimov"),
+        _tx(0, 1_000_000, "in", "Testveks Kazlum"),
+        _tx(1, 1_000_000, "in", "Тествекс Казлум"),
+        _tx(2, 1_000_000, "in", "T. Kazlum"),
         _tx(3, 1_000_000, "in", "Someone Else"),
     ]
     case = make_case(txs)
@@ -141,9 +141,9 @@ def test_verifier_zero_citations_is_zero_precision():
 def test_case_from_csv_messy_jury_input():
     csv_text = (
         "Дата,Сумма,type,counterparty,memo\n"
-        '05.04.2026 10:12,"43 500 000",in,Abdurahmon Karimov,\n'
-        "12.04.2026 11:40,47800000,in,Dilnoza Yusupova,qarz\n"
-        "19.04.2026 09:55,44100000,out,Savdo Markaz MChJ,tovar\n"
+        '05.04.2026 10:12,"43 500 000",in,Avekslum Kazlum,\n'
+        "12.04.2026 11:40,47800000,in,Pexlum Qexlum,qarz\n"
+        "19.04.2026 09:55,44100000,out,DEMO Company ALPHA MChJ,tovar\n"
     )
     case = case_from_csv(csv_text)
     assert len(case.transactions) == 3

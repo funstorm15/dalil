@@ -66,11 +66,11 @@ def test_ambiguous_names_no_unjustified_merge():
     cl = build_entity_clusters(case)
     # transliteration variants + same phone: one person, merge is justified
     assert cl["cp-0"] == cl["cp-1"]
-    # "A. Karimov" with two plausible full names in the case: no merge
+    # "A. Kazlum" with two plausible full names in the case: no merge
     assert cl["cp-2"] != cl["cp-3"]
     assert cl["cp-2"] != cl["cp-4"]
     assert cl["cp-3"] != cl["cp-4"]
-    # prefix-related distinct first names (Temur / Temurbek): no merge
+    # prefix-related distinct first names (Testveks / Testvekslong): no merge
     assert cl["cp-10"] != cl["cp-0"]
     # same business with/without corp suffix: merge is justified
     assert cl["cp-6"] == cl["cp-7"]

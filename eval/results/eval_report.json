@@ -190,7 +190,7 @@
       "narrative": 0.0,
       "verify": 1.06
     },
-    "conditions": "re-measured 11 Oct ~07:15 with OMP_NUM_THREADS=1 (as the demo API runs), laptop power profile 'power-saver'; the full eval run (default OpenMP threads) measured p50 830.3 ms"
+    "conditions": "re-measured 11 Oct ~07:15 with OMP_NUM_THREADS=1 (as the demo API runs), laptop power profile 'power-saver'; the full eval run (default OpenMP threads) measured p50 830.3 ms; historical, before DEMO identity migration"
   },
   "narrative": {
     "what": "experimental local-LLM drafts; meaning of claims is NOT measured",
@@ -218,7 +218,7 @@
       "prompt": 1313,
       "completion": 337
     },
-    "conditions": "LLM: Qwen2.5-1.5B Q4, llama.cpp 4 threads, laptop power profile 'power-saver', quiet machine"
+    "conditions": "LLM: Qwen2.5-1.5B Q4, llama.cpp 4 threads, laptop power profile 'power-saver', quiet machine; historical, before DEMO identity migration and prompt edit"
   },
   "failures": {
     "false_positives_at_50": [

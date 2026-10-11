@@ -1,7 +1,7 @@
 [
  {
   "case_id": "DE-00001",
-  "subject_name": "Sevara Yusupov",
+  "subject_name": "DEMO Person DE-00001-SUBJECT",
   "subject_kind": "person",
   "branch": "Guliston",
   "opened_at": "2026-07-04",
@@ -20,7 +20,7 @@
  },
  {
   "case_id": "DE-00006",
-  "subject_name": "Rustam Xolmatov",
+  "subject_name": "DEMO Person DE-00006-SUBJECT",
   "subject_kind": "person",
   "branch": "Buxoro",
   "opened_at": "2026-07-03",
@@ -39,7 +39,7 @@
  },
  {
   "case_id": "DE-00028",
-  "subject_name": "Otabek Volkov",
+  "subject_name": "DEMO Person DE-00028-SUBJECT",
   "subject_kind": "person",
   "branch": "Buxoro",
   "opened_at": "2026-07-04",
@@ -58,7 +58,7 @@
  },
  {
   "case_id": "DE-00035",
-  "subject_name": "Farhod Mamatov",
+  "subject_name": "DEMO Person DE-00035-SUBJECT",
   "subject_kind": "person",
   "branch": "Toshkent",
   "opened_at": "2026-07-05",
@@ -77,7 +77,7 @@
  },
  {
   "case_id": "DE-00042",
-  "subject_name": "Akmal Sharipov",
+  "subject_name": "DEMO Person DE-00042-SUBJECT",
   "subject_kind": "person",
   "branch": "Xiva",
   "opened_at": "2026-07-01",
@@ -96,7 +96,7 @@
  },
  {
   "case_id": "DE-00053",
-  "subject_name": "Zoomalay MChJ",
+  "subject_name": "DEMO Company DE-00053-SUBJECT",
   "subject_kind": "business",
   "branch": "Namangan",
   "opened_at": "2026-07-01",
@@ -115,7 +115,7 @@
  },
  {
   "case_id": "DE-00060",
-  "subject_name": "Kamola Toshpo'latov",
+  "subject_name": "DEMO Person DE-00060-SUBJECT",
   "subject_kind": "person",
   "branch": "Qarshi",
   "opened_at": "2026-07-01",
@@ -134,7 +134,7 @@
  },
  {
   "case_id": "DE-00061",
-  "subject_name": "Shahzoda Volkov",
+  "subject_name": "DEMO Person DE-00061-SUBJECT",
   "subject_kind": "person",
   "branch": "Samarqand",
   "opened_at": "2026-07-05",
@@ -153,7 +153,7 @@
  },
  {
   "case_id": "DE-00062",
-  "subject_name": "Temur Petrov",
+  "subject_name": "DEMO Person DE-00062-SUBJECT",
   "subject_kind": "person",
   "branch": "Guliston",
   "opened_at": "2026-07-04",
@@ -172,7 +172,7 @@
  },
  {
   "case_id": "DE-00005",
-  "subject_name": "Gulnora Ochilov",
+  "subject_name": "DEMO Person DE-00005-SUBJECT",
   "subject_kind": "person",
   "branch": "Termiz",
   "opened_at": "2026-07-05",
@@ -190,7 +190,7 @@
  },
  {
   "case_id": "DE-00007",
-  "subject_name": "Zarafshon Farm MChJ",
+  "subject_name": "DEMO Company DE-00007-SUBJECT",
   "subject_kind": "business",
   "branch": "Toshkent",
   "opened_at": "2026-07-03",
@@ -208,7 +208,7 @@
  },
  {
   "case_id": "DE-00019",
-  "subject_name": "Dmitriy Haydarov",
+  "subject_name": "DEMO Person DE-00019-SUBJECT",
   "subject_kind": "person",
   "branch": "Termiz",
   "opened_at": "2026-07-02",
@@ -226,7 +226,7 @@
  },
  {
   "case_id": "DE-00023",
-  "subject_name": "Hazar Logistika MChJ",
+  "subject_name": "DEMO Company DE-00023-SUBJECT",
   "subject_kind": "business",
   "branch": "Andijon",
   "opened_at": "2026-07-05",
@@ -244,7 +244,7 @@
  },
  {
   "case_id": "DE-00030",
-  "subject_name": "Hazar Logistika MKK",
+  "subject_name": "DEMO Company DE-00030-SUBJECT",
   "subject_kind": "business",
   "branch": "Farg'ona",
   "opened_at": "2026-07-05",
@@ -262,7 +262,7 @@
  },
  {
   "case_id": "DE-00031",
-  "subject_name": "Otabek Yusupov",
+  "subject_name": "DEMO Person DE-00031-SUBJECT",
   "subject_kind": "person",
   "branch": "Qarshi",
   "opened_at": "2026-07-04",
@@ -280,7 +280,7 @@
  },
  {
   "case_id": "DE-00047",
-  "subject_name": "Sherzod Sharipov",
+  "subject_name": "DEMO Person DE-00047-SUBJECT",
   "subject_kind": "person",
   "branch": "Guliston",
   "opened_at": "2026-07-05",
@@ -298,7 +298,7 @@
  },
  {
   "case_id": "DE-00052",
-  "subject_name": "Zoomalay MChJ",
+  "subject_name": "DEMO Company DE-00052-SUBJECT",
   "subject_kind": "business",
   "branch": "Toshkent",
   "opened_at": "2026-07-05",
@@ -316,7 +316,7 @@
  },
  {
   "case_id": "DE-00055",
-  "subject_name": "Temur Sattorov",
+  "subject_name": "DEMO Person DE-00055-SUBJECT",
   "subject_kind": "person",
   "branch": "Toshkent",
   "opened_at": "2026-07-04",
@@ -334,7 +334,7 @@
  },
  {
   "case_id": "DE-00059",
-  "subject_name": "Argo Trans MChJ",
+  "subject_name": "DEMO Company DE-00059-SUBJECT",
   "subject_kind": "business",
   "branch": "Nukus",
   "opened_at": "2026-07-04",
@@ -352,7 +352,7 @@
  },
  {
   "case_id": "DE-00064",
-  "subject_name": "Media Group MKK",
+  "subject_name": "DEMO Company DE-00064-SUBJECT",
   "subject_kind": "business",
   "branch": "Namangan",
   "opened_at": "2026-07-02",
@@ -370,7 +370,7 @@
  },
  {
   "case_id": "DE-00072",
-  "subject_name": "Elena Ochilov",
+  "subject_name": "DEMO Person DE-00072-SUBJECT",
   "subject_kind": "person",
   "branch": "Jizzax",
   "opened_at": "2026-07-05",
@@ -388,7 +388,7 @@
  },
  {
   "case_id": "DE-00075",
-  "subject_name": "Ultra Market MKK",
+  "subject_name": "DEMO Company DE-00075-SUBJECT",
   "subject_kind": "business",
   "branch": "Jizzax",
   "opened_at": "2026-07-05",
@@ -406,7 +406,7 @@
  },
  {
   "case_id": "DE-00003",
-  "subject_name": "Islom Ochilov",
+  "subject_name": "DEMO Person DE-00003-SUBJECT",
   "subject_kind": "person",
   "branch": "Guliston",
   "opened_at": "2026-07-04",
@@ -424,7 +424,7 @@
  },
  {
   "case_id": "DE-00065",
-  "subject_name": "Irina Gusev",
+  "subject_name": "DEMO Person DE-00065-SUBJECT",
   "subject_kind": "person",
   "branch": "Nukus",
   "opened_at": "2026-07-03",
@@ -442,7 +442,7 @@
  },
  {
   "case_id": "DE-00057",
-  "subject_name": "Nuria Agro MChJ",
+  "subject_name": "DEMO Company DE-00057-SUBJECT",
   "subject_kind": "business",
   "branch": "Xiva",
   "opened_at": "2026-07-05",
@@ -460,7 +460,7 @@
  },
  {
   "case_id": "DE-00011",
-  "subject_name": "Doniyor Karimov",
+  "subject_name": "DEMO Person DE-00011-SUBJECT",
   "subject_kind": "person",
   "branch": "Nukus",
   "opened_at": "2026-07-01",
@@ -478,7 +478,7 @@
  },
  {
   "case_id": "DE-00049",
-  "subject_name": "Temur Mirzayev",
+  "subject_name": "DEMO Person DE-00049-SUBJECT",
   "subject_kind": "person",
   "branch": "Xiva",
   "opened_at": "2026-07-03",
@@ -496,7 +496,7 @@
  },
  {
   "case_id": "DE-00009",
-  "subject_name": "Irina Ibrohimov",
+  "subject_name": "DEMO Person DE-00009-SUBJECT",
   "subject_kind": "person",
   "branch": "Termiz",
   "opened_at": "2026-07-03",
@@ -514,7 +514,7 @@
  },
  {
   "case_id": "DE-00015",
-  "subject_name": "Zilola Popov",
+  "subject_name": "DEMO Person DE-00015-SUBJECT",
   "subject_kind": "person",
   "branch": "Andijon",
   "opened_at": "2026-07-05",
@@ -532,7 +532,7 @@
  },
  {
   "case_id": "DE-00025",
-  "subject_name": "Malika Sattorov",
+  "subject_name": "DEMO Person DE-00025-SUBJECT",
   "subject_kind": "person",
   "branch": "Qarshi",
   "opened_at": "2026-07-02",
@@ -549,7 +549,7 @@
  },
  {
   "case_id": "DE-00032",
-  "subject_name": "Gulbahor Tursunov",
+  "subject_name": "DEMO Person DE-00032-SUBJECT",
   "subject_kind": "person",
   "branch": "Andijon",
   "opened_at": "2026-07-01",
@@ -566,7 +566,7 @@
  },
  {
   "case_id": "DE-00034",
-  "subject_name": "Munisa Umarov",
+  "subject_name": "DEMO Person DE-00034-SUBJECT",
   "subject_kind": "person",
   "branch": "Guliston",
   "opened_at": "2026-07-01",
@@ -583,7 +583,7 @@
  },
  {
   "case_id": "DE-00071",
-  "subject_name": "Nuria Agro MKK",
+  "subject_name": "DEMO Company DE-00071-SUBJECT",
   "subject_kind": "business",
   "branch": "Toshkent",
   "opened_at": "2026-07-02",
@@ -600,7 +600,7 @@
  },
  {
   "case_id": "DE-00079",
-  "subject_name": "Media Group MChJ",
+  "subject_name": "DEMO Company DE-00079-SUBJECT",
   "subject_kind": "business",
   "branch": "Qarshi",
   "opened_at": "2026-07-05",
@@ -617,7 +617,7 @@
  },
  {
   "case_id": "DE-00029",
-  "subject_name": "Kamola Mamatov",
+  "subject_name": "DEMO Person DE-00029-SUBJECT",
   "subject_kind": "person",
   "branch": "Namangan",
   "opened_at": "2026-07-01",
@@ -634,7 +634,7 @@
  },
  {
   "case_id": "DE-00040",
-  "subject_name": "Rustam Nazarov",
+  "subject_name": "DEMO Person DE-00040-SUBJECT",
   "subject_kind": "person",
   "branch": "Xiva",
   "opened_at": "2026-07-01",
@@ -651,7 +651,7 @@
  },
  {
   "case_id": "DE-00043",
-  "subject_name": "Akmal Xolmatov",
+  "subject_name": "DEMO Person DE-00043-SUBJECT",
   "subject_kind": "person",
   "branch": "Xiva",
   "opened_at": "2026-07-02",
@@ -668,7 +668,7 @@
  },
  {
   "case_id": "DE-00074",
-  "subject_name": "Zilola Mirzayev",
+  "subject_name": "DEMO Person DE-00074-SUBJECT",
   "subject_kind": "person",
   "branch": "Xiva",
   "opened_at": "2026-07-02",
@@ -685,7 +685,7 @@
  },
  {
   "case_id": "DE-00076",
-  "subject_name": "Sardor Gusev",
+  "subject_name": "DEMO Person DE-00076-SUBJECT",
   "subject_kind": "person",
   "branch": "Farg'ona",
   "opened_at": "2026-07-04",
@@ -702,7 +702,7 @@
  },
  {
   "case_id": "DE-00044",
-  "subject_name": "Gulnora Kuznetsov",
+  "subject_name": "DEMO Person DE-00044-SUBJECT",
   "subject_kind": "person",
   "branch": "Termiz",
   "opened_at": "2026-07-02",
@@ -719,7 +719,7 @@
  },
  {
   "case_id": "DE-00000",
-  "subject_name": "Sergey Yusupov",
+  "subject_name": "DEMO Person DE-00000-SUBJECT",
   "subject_kind": "person",
   "branch": "Nukus",
   "opened_at": "2026-07-05",
@@ -736,7 +736,7 @@
  },
  {
   "case_id": "DE-00002",
-  "subject_name": "Jurabek Orlov",
+  "subject_name": "DEMO Person DE-00002-SUBJECT",
   "subject_kind": "person",
   "branch": "Namangan",
   "opened_at": "2026-07-05",
@@ -753,7 +753,7 @@
  },
  {
   "case_id": "DE-00066",
-  "subject_name": "Islom Umarov",
+  "subject_name": "DEMO Person DE-00066-SUBJECT",
   "subject_kind": "person",
   "branch": "Andijon",
   "opened_at": "2026-07-01",
@@ -770,7 +770,7 @@
  },
  {
   "case_id": "DE-00012",
-  "subject_name": "Nodira Sokolov",
+  "subject_name": "DEMO Person DE-00012-SUBJECT",
   "subject_kind": "person",
   "branch": "Jizzax",
   "opened_at": "2026-07-03",
@@ -785,7 +785,7 @@
  },
  {
   "case_id": "DE-00017",
-  "subject_name": "Zilola Popov",
+  "subject_name": "DEMO Person DE-00017-SUBJECT",
   "subject_kind": "person",
   "branch": "Jizzax",
   "opened_at": "2026-07-03",
@@ -800,7 +800,7 @@
  },
  {
   "case_id": "DE-00027",
-  "subject_name": "Zulfiya Ergashev",
+  "subject_name": "DEMO Person DE-00027-SUBJECT",
   "subject_kind": "person",
   "branch": "Jizzax",
   "opened_at": "2026-07-04",
@@ -815,7 +815,7 @@
  },
  {
   "case_id": "DE-00077",
-  "subject_name": "Jasur Gusev",
+  "subject_name": "DEMO Person DE-00077-SUBJECT",
   "subject_kind": "person",
   "branch": "Jizzax",
   "opened_at": "2026-07-02",
@@ -830,7 +830,7 @@
  },
  {
   "case_id": "DE-00022",
-  "subject_name": "Otabek Tursunov",
+  "subject_name": "DEMO Person DE-00022-SUBJECT",
   "subject_kind": "person",
   "branch": "Jizzax",
   "opened_at": "2026-07-02",
@@ -848,7 +848,7 @@
  },
  {
   "case_id": "DE-00033",
-  "subject_name": "Binokor Savdo MKK",
+  "subject_name": "DEMO Company DE-00033-SUBJECT",
   "subject_kind": "business",
   "branch": "Qarshi",
   "opened_at": "2026-07-04",
@@ -866,7 +866,7 @@
  },
  {
   "case_id": "DE-00041",
-  "subject_name": "Temur Sokolov",
+  "subject_name": "DEMO Person DE-00041-SUBJECT",
   "subject_kind": "person",
   "branch": "Guliston",
   "opened_at": "2026-07-05",
@@ -884,7 +884,7 @@
  },
  {
   "case_id": "DE-00039",
-  "subject_name": "Gulnora Karimov",
+  "subject_name": "DEMO Person DE-00039-SUBJECT",
   "subject_kind": "person",
   "branch": "Samarqand",
   "opened_at": "2026-07-04",
@@ -902,7 +902,7 @@
  },
  {
   "case_id": "DE-00018",
-  "subject_name": "Islom Volkov",
+  "subject_name": "DEMO Person DE-00018-SUBJECT",
   "subject_kind": "person",
   "branch": "Termiz",
   "opened_at": "2026-07-03",
@@ -919,7 +919,7 @@
  },
  {
   "case_id": "DE-00024",
-  "subject_name": "Eco Milk MChJ",
+  "subject_name": "DEMO Company DE-00024-SUBJECT",
   "subject_kind": "business",
   "branch": "Andijon",
   "opened_at": "2026-07-03",
@@ -936,7 +936,7 @@
  },
  {
   "case_id": "DE-00046",
-  "subject_name": "Munisa Volkov",
+  "subject_name": "DEMO Person DE-00046-SUBJECT",
   "subject_kind": "person",
   "branch": "Namangan",
   "opened_at": "2026-07-01",
@@ -953,7 +953,7 @@
  },
  {
   "case_id": "DE-00070",
-  "subject_name": "Jasur Ergashev",
+  "subject_name": "DEMO Person DE-00070-SUBJECT",
   "subject_kind": "person",
   "branch": "Termiz",
   "opened_at": "2026-07-01",
@@ -970,7 +970,7 @@
  },
  {
   "case_id": "DE-00068",
-  "subject_name": "Dilrabo Sokolov",
+  "subject_name": "DEMO Person DE-00068-SUBJECT",
   "subject_kind": "person",
   "branch": "Andijon",
   "opened_at": "2026-07-03",
@@ -987,7 +987,7 @@
  },
  {
   "case_id": "DE-00056",
-  "subject_name": "Ulug'bek Sokolov",
+  "subject_name": "DEMO Person DE-00056-SUBJECT",
   "subject_kind": "person",
   "branch": "Buxoro",
   "opened_at": "2026-07-03",
@@ -1004,7 +1004,7 @@
  },
  {
   "case_id": "DE-00069",
-  "subject_name": "Gulbahor Kuznetsov",
+  "subject_name": "DEMO Person DE-00069-SUBJECT",
   "subject_kind": "person",
   "branch": "Qarshi",
   "opened_at": "2026-07-02",
@@ -1021,7 +1021,7 @@
  },
  {
   "case_id": "DE-00054",
-  "subject_name": "Dilrabo Salimov",
+  "subject_name": "DEMO Person DE-00054-SUBJECT",
   "subject_kind": "person",
   "branch": "Jizzax",
   "opened_at": "2026-07-05",
@@ -1038,7 +1038,7 @@
  },
  {
   "case_id": "DE-00078",
-  "subject_name": "Silk Road Trade MChJ",
+  "subject_name": "DEMO Company DE-00078-SUBJECT",
   "subject_kind": "business",
   "branch": "Jizzax",
   "opened_at": "2026-07-03",
@@ -1055,7 +1055,7 @@
  },
  {
   "case_id": "DE-00051",
-  "subject_name": "Jasur Sokolov",
+  "subject_name": "DEMO Person DE-00051-SUBJECT",
   "subject_kind": "person",
   "branch": "Qarshi",
   "opened_at": "2026-07-01",
@@ -1072,7 +1072,7 @@
  },
  {
   "case_id": "DE-00020",
-  "subject_name": "Shahzoda Umarov",
+  "subject_name": "DEMO Person DE-00020-SUBJECT",
   "subject_kind": "person",
   "branch": "Namangan",
   "opened_at": "2026-07-03",
@@ -1089,7 +1089,7 @@
  },
  {
   "case_id": "DE-00014",
-  "subject_name": "Kamila Umarov",
+  "subject_name": "DEMO Person DE-00014-SUBJECT",
   "subject_kind": "person",
   "branch": "Qarshi",
   "opened_at": "2026-07-02",
@@ -1106,7 +1106,7 @@
  },
  {
   "case_id": "DE-00036",
-  "subject_name": "Malika Gusev",
+  "subject_name": "DEMO Person DE-00036-SUBJECT",
   "subject_kind": "person",
   "branch": "Jizzax",
   "opened_at": "2026-07-02",
@@ -1123,7 +1123,7 @@
  },
  {
   "case_id": "DE-00004",
-  "subject_name": "Doniyor Kuznetsov",
+  "subject_name": "DEMO Person DE-00004-SUBJECT",
   "subject_kind": "person",
   "branch": "Xiva",
   "opened_at": "2026-07-03",
@@ -1140,7 +1140,7 @@
  },
  {
   "case_id": "DE-00037",
-  "subject_name": "Malika Haydarov",
+  "subject_name": "DEMO Person DE-00037-SUBJECT",
   "subject_kind": "person",
   "branch": "Buxoro",
   "opened_at": "2026-07-04",
@@ -1157,7 +1157,7 @@
  },
  {
   "case_id": "DE-00045",
-  "subject_name": "Abdurahmon Kuznetsov",
+  "subject_name": "DEMO Person DE-00045-SUBJECT",
   "subject_kind": "person",
   "branch": "Samarqand",
   "opened_at": "2026-07-01",
@@ -1174,7 +1174,7 @@
  },
  {
   "case_id": "DE-00008",
-  "subject_name": "Zilola Morozov",
+  "subject_name": "DEMO Person DE-00008-SUBJECT",
   "subject_kind": "person",
   "branch": "Andijon",
   "opened_at": "2026-07-05",
@@ -1189,7 +1189,7 @@
  },
  {
   "case_id": "DE-00010",
-  "subject_name": "Jurabek Petrov",
+  "subject_name": "DEMO Person DE-00010-SUBJECT",
   "subject_kind": "person",
   "branch": "Namangan",
   "opened_at": "2026-07-03",
@@ -1204,7 +1204,7 @@
  },
  {
   "case_id": "DE-00013",
-  "subject_name": "Otabek Zokirov",
+  "subject_name": "DEMO Person DE-00013-SUBJECT",
   "subject_kind": "person",
   "branch": "Samarqand",
   "opened_at": "2026-07-02",
@@ -1219,7 +1219,7 @@
  },
  {
   "case_id": "DE-00016",
-  "subject_name": "Sherzod Rahimov",
+  "subject_name": "DEMO Person DE-00016-SUBJECT",
   "subject_kind": "person",
   "branch": "Samarqand",
   "opened_at": "2026-07-03",
@@ -1234,7 +1234,7 @@
  },
  {
   "case_id": "DE-00021",
-  "subject_name": "Elena Vlasov",
+  "subject_name": "DEMO Person DE-00021-SUBJECT",
   "subject_kind": "person",
   "branch": "Andijon",
   "opened_at": "2026-07-03",
@@ -1249,7 +1249,7 @@
  },
  {
   "case_id": "DE-00026",
-  "subject_name": "Nuria Agro MKK",
+  "subject_name": "DEMO Company DE-00026-SUBJECT",
   "subject_kind": "business",
   "branch": "Samarqand",
   "opened_at": "2026-07-01",
@@ -1264,7 +1264,7 @@
  },
  {
   "case_id": "DE-00038",
-  "subject_name": "Zilola Sharipov",
+  "subject_name": "DEMO Person DE-00038-SUBJECT",
   "subject_kind": "person",
   "branch": "Qarshi",
   "opened_at": "2026-07-01",
@@ -1279,7 +1279,7 @@
  },
  {
   "case_id": "DE-00048",
-  "subject_name": "Zilola Sokolov",
+  "subject_name": "DEMO Person DE-00048-SUBJECT",
   "subject_kind": "person",
   "branch": "Andijon",
   "opened_at": "2026-07-03",
@@ -1294,7 +1294,7 @@
  },
  {
   "case_id": "DE-00050",
-  "subject_name": "Sergey Qodirov",
+  "subject_name": "DEMO Person DE-00050-SUBJECT",
   "subject_kind": "person",
   "branch": "Namangan",
   "opened_at": "2026-07-01",
@@ -1309,7 +1309,7 @@
  },
  {
   "case_id": "DE-00058",
-  "subject_name": "Bekzod Morozov",
+  "subject_name": "DEMO Person DE-00058-SUBJECT",
   "subject_kind": "person",
   "branch": "Andijon",
   "opened_at": "2026-07-05",
@@ -1324,7 +1324,7 @@
  },
  {
   "case_id": "DE-00063",
-  "subject_name": "Farhod Haydarov",
+  "subject_name": "DEMO Person DE-00063-SUBJECT",
   "subject_kind": "person",
   "branch": "Buxoro",
   "opened_at": "2026-07-02",
@@ -1339,7 +1339,7 @@
  },
  {
   "case_id": "DE-00067",
-  "subject_name": "Eco Milk MChJ",
+  "subject_name": "DEMO Company DE-00067-SUBJECT",
   "subject_kind": "business",
   "branch": "Andijon",
   "opened_at": "2026-07-02",
@@ -1354,7 +1354,7 @@
  },
  {
   "case_id": "DE-00073",
-  "subject_name": "Binokor Savdo MKK",
+  "subject_name": "DEMO Company DE-00073-SUBJECT",
   "subject_kind": "business",
   "branch": "Toshkent",
   "opened_at": "2026-07-01",

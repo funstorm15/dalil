@@ -173,15 +173,15 @@ export async function verifyBundle(bundle: Record<string, any>): Promise<VerifyR
 }
 
 export const SAMPLE_CSV = `ts,amount,direction,counterparty_name,counterparty_kind,channel,memo
-05.04.2026 10:12,"43 500 000",in,Abdurahmon Karimov,person,cash_in,
-12.04.2026 11:40,47800000,in,Dilnoza Yusupova,person,cash_in,
-19.04.2026 09:55,"46 200 000",in,Sardor Tursunov,person,p2p,qarz
-26.04.2026 14:03,44100000,in,Gulbahor Rahimov,person,cash_in,
-03.05.2026 16:20,"45 000 000",in,Jasur Mamatov,person,p2p,
-10.05.2026 12:08,48900000,in,Nodira Xolmatova,person,cash_in,
-17.05.2026 10:31,"42 750 000",in,Otabek Ergashev,person,p2p,perevod
-24.05.2026 15:47,45600000,in,Sherzod Nazarov,person,cash_in,
-31.05.2026 11:19,"47 100 000",in,Zilola Ismailova,person,p2p,
-07.06.2026 13:02,44400000,in,Farhod Qodirov,person,cash_in,
-14.06.2026 17:26,"280 000 000",out,Savdo Markaz MChJ,business,wire,tovar
-21.06.2026 10:44,"150 000 000",out,Aleksandr Petrov,person,p2p,`;
+05.04.2026 10:12,"43 500 000",in,DEMO Person TEMPLATE-001,person,cash_in,
+12.04.2026 11:40,47800000,in,DEMO Person TEMPLATE-002,person,cash_in,
+19.04.2026 09:55,"46 200 000",in,DEMO Person TEMPLATE-003,person,p2p,qarz
+26.04.2026 14:03,44100000,in,DEMO Person TEMPLATE-004,person,cash_in,
+03.05.2026 16:20,"45 000 000",in,DEMO Person TEMPLATE-005,person,p2p,
+10.05.2026 12:08,48900000,in,DEMO Person TEMPLATE-006,person,cash_in,
+17.05.2026 10:31,"42 750 000",in,DEMO Person TEMPLATE-007,person,p2p,perevod
+24.05.2026 15:47,45600000,in,DEMO Person TEMPLATE-008,person,cash_in,
+31.05.2026 11:19,"47 100 000",in,DEMO Person TEMPLATE-009,person,p2p,
+07.06.2026 13:02,44400000,in,DEMO Person TEMPLATE-010,person,cash_in,
+14.06.2026 17:26,"280 000 000",out,DEMO Company TEMPLATE-011,business,wire,tovar
+21.06.2026 10:44,"150 000 000",out,DEMO Person TEMPLATE-012,person,p2p,`;

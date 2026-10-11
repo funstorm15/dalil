@@ -1,0 +1,27 @@
+{
+  "cases_demo.jsonl": {
+    "cases": 80,
+    "all_49_features_equal": true,
+    "rule_hits_equal": true,
+    "sha256": "08705c45a73962c9f02f11aedcafdbcacfd2989e01a9b198bbc90a623e4cc409"
+  },
+  "cases_novel.jsonl": {
+    "cases": 600,
+    "all_49_features_equal": true,
+    "rule_hits_equal": true,
+    "sha256": "3c82561cfeacf11779be68a4305d3a940995036389ce649a9a85f22577b94c2f"
+  },
+  "cases_test.jsonl": {
+    "cases": 600,
+    "all_49_features_equal": true,
+    "rule_hits_equal": true,
+    "sha256": "95d81c58cee2973254f167793528e5b0d1ae1b745af99993edf93634af913c72"
+  },
+  "cases_train.jsonl": {
+    "cases": 1800,
+    "all_49_features_equal": true,
+    "rule_hits_equal": true,
+    "sha256": "3a2b7598473477d979d7f3f30a25997fc907504f00579738d535277dcdb8fdf4"
+  },
+  "note": "Fresh verification 2026-10-11: all 49 inference features (absolute tolerance 1e-9), rule matches, severity and evidence transaction IDs unchanged across 3080 supplied cases. Identity fields checked for DEMO tokens (SUBJ is an internal placeholder). Model not retrained. Historical LLM/latency measurements predate relabelling and prompt edit."
+}

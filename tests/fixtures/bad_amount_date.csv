@@ -1,5 +1,5 @@
 ts,amount,direction,counterparty_name
-05.04.2026 09:15,abc,in,Abdurahmon Karimov
-not-a-date,47500000,in,Abdurahmon Karimov
-07.04.2026 10:00,,out,Dilnoza Yusupova
-31.13.2026 10:00,10000000,out,Savdo Markaz
+05.04.2026 09:15,abc,in,DEMO Person FIXTURE-001
+not-a-date,47500000,in,DEMO Person FIXTURE-001
+07.04.2026 10:00,,out,DEMO Person FIXTURE-002
+31.13.2026 10:00,10000000,out,DEMO Company ALPHA

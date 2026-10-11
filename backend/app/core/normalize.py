@@ -60,7 +60,7 @@ def norm_name(name: str) -> str:
 def name_tokens(name: str) -> set[str]:
     n = norm_name(name)
     toks = set(n.split())
-    # fold initials: "a karimov" ~ "abdurahmon karimov" when combined elsewhere
+    # fold initials: "a kazlum" ~ "avekslum kazlum" when combined elsewhere
     return toks
 
 
@@ -78,9 +78,13 @@ def names_match(a: str, b: str, threshold: float = 0.86) -> bool:
         return False
     if na == nb:
         return True
+    # Demo labels are identifiers, not natural names. Never fuzzy-merge nearby
+    # labels such as DEMO Person A001 and DEMO Person A002.
+    if na.startswith("demo ") or nb.startswith("demo "):
+        return False
     ta, tb = set(na.split()), set(nb.split())
     if ta and tb:
-        # expand single-letter initials against the other side ("T. Karimov" ~ "Temur Karimov")
+        # expand single-letter initials against the other side ("T. Kazlum" ~ "Testveks Kazlum")
         def _expand(toks: set[str], other: set[str]) -> set[str]:
             out: set[str] = set()
             for t in toks:
@@ -101,13 +105,13 @@ def names_match(a: str, b: str, threshold: float = 0.86) -> bool:
                 s = next(iter(shorter))
                 if len(s) == 1:  # initial: resolvable within a pair
                     return any(w.startswith(s) for w in longer)
-                # a lone generic token ("Karimov" vs "Temur Karimov") is too
+                # a lone generic token ("Kazlum" vs "Testveks Kazlum") is too
                 # weak to claim identity — refuse rather than over-merge
                 return False
             return True
     # token-wise similarity: every token of the longer name needs a close
-    # partner — catches typos ("Abdurakhmon" ~ "Abdurahmon") without merging
-    # distinct prefix-related names ("Temur" vs "Temurbek"), which whole-string
+    # partner — catches typos ("Avekslum" ~ "Avekslom") without merging
+    # distinct prefix-related names ("Testveks" vs "Testvekslong"), which whole-string
     # difflib would merge at 0.86
     longer, shorter = (ta, tb) if len(ta) >= len(tb) else (tb, ta)
     if not shorter:
@@ -121,6 +125,8 @@ def names_match(a: str, b: str, threshold: float = 0.86) -> bool:
 def norm_phone(raw: str) -> str:
     if not raw:
         return ""
+    if raw.upper().startswith("DEMO-PHONE-"):
+        return raw.upper()
     digits = re.sub(r"\D", "", raw)
     if not digits:
         return ""

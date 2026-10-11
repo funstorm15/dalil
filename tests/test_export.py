@@ -25,7 +25,7 @@ DEAD_LLM = LLMClient(base_url="http://127.0.0.1:1/v1", model="none")
 DECISION = {
     "case_id": "FX-2026-0042",
     "decision": "escalate",
-    "analyst": "n.karimova",
+    "analyst": "Synthetic QA",
     "note": "structure + mule: escalating to supervisor",
 }
 
@@ -76,7 +76,7 @@ def test_canonical_encoding_is_order_stable():
     b = canonical_bytes({"a": [2, {"c": 3, "d": 4}], "b": 1})
     assert a == b
     # utf-8, not \uXXXX escapes — Cyrillic stays readable
-    assert "Темур" in canonical_bytes({"n": "Темур"}).decode("utf-8")
+    assert "Тествекс" in canonical_bytes({"n": "Тествекс"}).decode("utf-8")
 
 
 def test_tampering_with_score_is_detected(demo):
@@ -152,7 +152,7 @@ def test_export_api_round_trip_and_tamper(demo, monkeypatch, tmp_path):
         # analyst decision first, so the export carries it
         r = client.post("/api/decision", json={
             "analysis_id": aid, "decision": "escalate",
-            "analyst": "n.karimova", "note": "escalating: turnover mismatch"})
+            "analyst": "Synthetic QA", "note": "escalating: turnover mismatch"})
         assert r.status_code == 200 and r.json()["ok"]
 
         r = client.post("/api/export", json={"analysis_id": aid})

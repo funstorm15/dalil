@@ -25,27 +25,9 @@ END_TS = datetime(2026, 6, 30, 21, 0, 0)
 # the config file the team documents in DATA_CARD.md.
 REPORTING_THRESHOLD = 50_000_000
 
-FIRST_NAMES = [
-    "Abdurahmon", "Dilnoza", "Sardor", "Gulbahor", "Temur", "Jasur", "Nodira",
-    "Otabek", "Sherzod", "Zilola", "Farhod", "Malika", "Bekzod", "Shahzoda",
-    "Akmal", "Kamola", "Islom", "Sevara", "Ulug'bek", "Munisa", "Rustam",
-    "Benazir", "Doniyor", "Gulnora", "Khabib", "Dilrabo", "Sobir", "Zulfiya",
-    "Aleksandr", "Dmitriy", "Sergey", "Elena", "Irina", "Pavel", "Nikita",
-    "Oksana", "Rustam", "Kamila", "Jurabek", "Nigora",
-]
-LAST_NAMES = [
-    "Karimov", "Yusupov", "Tursunov", "Rahimov", "Sattorov", "Mamatov",
-    "Xolmatov", "Ergashev", "Nazarov", "Ismailov", "Qodirov", "Salimov",
-    "Toshpo'latov", "Mirzayev", "Ochilov", "Haydarov", "Zokirov", "Umarov",
-    "Sharipov", "Ibrohimov", "Petrov", "Sokolov", "Volkov", "Morozov",
-    "Vlasov", "Kuznetsov", "Popov", "Orlov", "Gusev", "Semenov",
-]
-BUSINESS_WORDS = [
-    "Texno Service", "Savdo Markaz", "Fayz Foods", "Argo Trans", "Yangi Sanoat",
-    "Toshkent Tekstil", "Silk Road Trade", "Hazar Logistika", "Nuria Agro",
-    "Ultra Market", "Binokor Savdo", "Zoomalay", "Chorsu Deli", "Sam Auto Parts",
-    "Media Group", "Info Soft", "Grand Stroy", "Eco Milk", "Zarafshon Farm",
-]
+FIRST_NAMES = [f"P{i:03d}" for i in range(40)]
+LAST_NAMES = [f"N{i:03d}" for i in range(30)]
+BUSINESS_WORDS = [f"DEMO Company C{i:03d}" for i in range(19)]
 BUSINESS_FORMS = ["MChJ", "MChJ", "MChJ", "MKK"]
 CITIES = [
     "Toshkent", "Samarqand", "Andijon", "Namangan", "Farg'ona", "Buxoro",
@@ -54,12 +36,12 @@ CITIES = [
 RUS_CITIES = ["Ташкент", "Самарканд", "Фергана", "Бухара", "Наманган"]
 GEO = CITIES + RUS_CITIES
 
-STREETS = ["Bunyodkor", "Amir Temur", "Chilonzor", "Yunusobod", "Mirzo Ulug'bek", "Shota Rustaveli"]
+STREETS = [f"DEMO Street S{i:03d}" for i in range(6)]
 
 MEMOS_CLEAN = [
-    "uy-joy ijara", "kommunal", "Makro savdo", "apteka", "benzin", "metro",
+    "uy-joy ijara", "kommunal", "demo savdo", "apteka", "benzin", "metro",
     "kofe", "sotib oldim", "oziq-ovqat", "мобильный", "интернет", "коммуналка",
-    "sharq kafé", "taxi", "dori-darmon", "bolalar bog'cha", "sug'urta",
+    "demo kafé", "taxi", "dori-darmon", "bolalar bog'cha", "sug'urta",
 ]
 MEMOS_SUSPICIOUS = [
     "qarz qaytarish", "avans", "товар", "perevod", "kunlik hisob", "",
@@ -68,15 +50,15 @@ MEMOS_SUSPICIOUS = [
 
 
 def acct(rng: random.Random) -> str:
-    return "UZ" + "".join(rng.choices(string.digits, k=24))
+    return "DEMO-ACCOUNT-" + "".join(rng.choices(string.ascii_uppercase, k=24))
 
 
 def phone(rng: random.Random) -> str:
-    return "+9989" + "".join(rng.choices(string.digits, k=8))
+    return "DEMO-PHONE-" + "".join(rng.choices(string.ascii_uppercase, k=8))
 
 
 def person_name(rng: random.Random) -> str:
-    return f"{rng.choice(FIRST_NAMES)} {rng.choice(LAST_NAMES)}"
+    return f"DEMO Person {rng.choice(FIRST_NAMES)}-{rng.choice(LAST_NAMES)}"
 
 
 def business_name(rng: random.Random) -> str:
@@ -192,7 +174,7 @@ class CaseBuilder:
         if rng.random() < 0.6:
             self.add(start + timedelta(days=rng.randint(0, WINDOW_DAYS), hours=rng.randint(9, 19)),
                      rng.randint(20, 450) * 1_000_000, "out",
-                     rng.choice([business_name(rng), person_name(rng), "Ipoteka Bank"]),
+                     rng.choice([business_name(rng), person_name(rng), "DEMO Company BANK"]),
                      "business" if rng.random() < 0.7 else "person",
                      rng.choice(["wire", "p2p", "pos"]),
                      rng.choice(["uy-joy to'lovi", "avtomobil", "kredit qaytarish", "oilaga", ""]),
@@ -213,7 +195,7 @@ class CaseBuilder:
         if rng.random() < 0.7:  # taxes / utilities
             for _ in range(rng.randint(1, 3)):
                 self.add(start + timedelta(days=rng.randint(0, WINDOW_DAYS), hours=rng.randint(9, 17)),
-                         rng.randint(5, 60) * 1_000_000, "out", "Soliq qomitasi", "business",
+                         rng.randint(5, 60) * 1_000_000, "out", "DEMO Company TAX", "business",
                          "wire", "soliq to'lovi")
         if rng.random() < 0.4:  # one big legit receipt or payment
             self.add(start + timedelta(days=rng.randint(0, WINDOW_DAYS), hours=rng.randint(9, 18)),
@@ -286,7 +268,7 @@ class CaseBuilder:
                      "p2p", rng.choice(["usdt", "p2p buy", "tether", "", "perevod"]),
                      other_phone=phone(rng), other_geo=rng.choice(GEO))
         self.add(END_TS - timedelta(days=rng.randint(0, 6)),
-                 self.total_in() * rng.uniform(0.7, 0.98), "out", "Crypto P2P Merchant",
+                 self.total_in() * rng.uniform(0.7, 0.98), "out", "DEMO Company CRYPTO",
                  "business", "p2p", "usdt")
         self.add(END_TS - timedelta(days=rng.randint(0, 4)),
                  self.total_in() * rng.uniform(0.05, 0.15), "out",
