@@ -1,10 +1,10 @@
 {
-  "version": "1.0.0-hackathon",
-  "generated_at": "2026-10-10",
+  "version": "1.1.0-release",
+  "generated_at": "2026-10-11",
   "product": {
     "name": "DALIL",
-    "tagline": "AML investigation copilot — evidence-grounded narratives in ~20 s, on-prem, zero data egress",
-    "partner": "MKBANK Financial Crime Compliance (alert-investigation desk)",
+    "tagline": "AML investigation copilot — evidence-linked score and template note, optional experimental local-LLM draft; no external AI API; synthetic demo data",
+    "partner": "MKBANK FCC (proposed pilot client — partnership not confirmed)",
     "regulator_context": "Central Bank of Uzbekistan AML/CFT reporting requirements",
     "reporting_threshold_uzs": 50000000
   },
@@ -20,13 +20,13 @@
       "name": "Qwen2.5-1.5B-Instruct (GGUF Q4_K_M)",
       "url": "https://huggingface.co/Qwen/Qwen2.5-1.5B-Instruct-GGUF",
       "licence": "Apache-2.0",
-      "note": "Default narrative model. MODEL=3b swaps in Qwen2.5-3B-Instruct (also Apache-2.0)."
+      "note": "Optional experimental draft model (local llama.cpp). Drafts are checked for citation IDs and numbers; meaning is not verified."
     },
     {
       "name": "llama.cpp prebuilt server (b11541, ubuntu-x64)",
       "url": "https://github.com/ggml-org/llama.cpp/releases/tag/b11541",
       "licence": "MIT",
-      "note": "Local OpenAI-compatible inference runtime. No cloud inference at runtime."
+      "note": "Local OpenAI-compatible inference runtime; no external AI API is called."
     },
     {
       "name": "scikit-learn HistGradientBoostingClassifier",
@@ -37,7 +37,7 @@
   "cost_model": {
     "currency": "USD",
     "llm_api_cost_per_investigation_usd": 0.0,
-    "basis": "Open-weight model running on-prem; no per-token vendor charge. Hardware only.",
+    "basis": "Open-weight model running locally; no per-token vendor charge. Hardware and staff cost remain.",
     "hardware_monthly_usd": 55,
     "hardware_note": "1× small GPU box (e.g. RTX A2000 / L4 class) or beefy CPU node serving the bank's on-prem cluster; amortised estimate.",
     "alerts_per_month": 4000,
@@ -45,25 +45,34 @@
     "analyst_minutes_after_per_alert": 10,
     "analyst_hourly_cost_usd": 15,
     "monthly_saving_usd": 30000,
-    "payback_note": "4000 alerts × 30 min saved × $15/h ÷ 60 = $30 000/month vs $55 hardware — >500× ROI; the binding constraint is model-risk validation, not cost."
+    "payback_note": "4000 alerts × 30 min saved × $15/h ÷ 60 = $30 000/month vs $55 hardware — >500× ROI; the binding constraint is model-risk validation, not cost.",
+    "assumptions_note": "Time savings, alert volume and ROI are planning assumptions for a pilot — no bank pilot has measured them. $0 LLM API cost excludes hardware ($55/mo above) and analyst time; it is not 'free operation'."
   },
   "latency_measured": {
-    "note": "16-core laptop, 1.5B Q4 on 2 threads (conservative vs 8 threads)",
-    "pipeline_no_llm_p50_ms": 108,
-    "pipeline_no_llm_p95_ms": 181,
-    "narrative_1_5b_2t_p50_ms": 24874,
-    "narrative_1_5b_8t_spotcheck_wall_s": [21.6, 21.8, 20.5]
+    "note": "16-core laptop; LLM = Qwen2.5-1.5B Q4 on 4 threads, measured by eval/run_eval.py on 11 Oct",
+    "pipeline_no_llm_p50_ms": 188.9,
+    "pipeline_no_llm_p95_ms": 310.4,
+    "llm_draft_p50_ms": 18534.0,
+    "llm_draft_p95_ms": 27197.0
   },
   "metrics_summary": {
-    "source": "eval/results/eval_report.json",
+    "source": "eval/results/eval_report.json (synthetic casebook)",
     "test_roc_auc": 0.9945,
     "novel_roc_auc": 0.9937,
     "rules_only_fpr_test": 0.5703,
     "ensemble_fpr_test": 0.0201,
     "ensemble_recall_novel": 0.9916,
-    "precision_at_10pct_prevalence_novel": 0.9637,
-    "narrative_citation_precision_1_5b_fewshot_n20": 0.95,
-    "narrative_invalid_citations": 0,
-    "narrative_unverified_numbers_n20": 1
+    "precision_at_assumed_10pct_prevalence_novel": 0.9637,
+    "llm_drafts_scored": 20,
+    "llm_drafts_fully_consistent": 0,
+    "llm_mean_citation_id_share": 0.95,
+    "llm_mean_numeric_consistency": 0.2,
+    "llm_truncated": 2,
+    "note": "LLM draft metrics cover citation IDs and numbers/dates only; meaning is not measured."
+  },
+  "deployment": {
+    "public_demo": "presenter's laptop behind an ngrok tunnel; synthetic data only; not a bank environment",
+    "egress": "no external AI API is called; outbound traffic of host/tunnel not audited",
+    "storage": "data/analyses/*.json and data/audit/audit.log on local disk; Docker needs volumes"
   }
 }

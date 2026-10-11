@@ -69,3 +69,14 @@ they exist only for offline evaluation, mirroring production where no labels exi
 python data/generator/generate.py   # writes data/generated/*.jsonl + dataset_meta.json
 python scripts/build_queue.py       # demo queue for the UI
 ```
+
+## Amount-format convention (read this before re-using the files)
+
+Messy amount strings use the generator's convention: `.` groups thousands (`"1.234.500"`,
+`"300.000"` = 300 000 UZS), `,` is the decimal mark (`"4,5 млн"`), spaces group thousands
+(`"43 500 000"`). The pipeline reads casebook records with `amount_format = dot-thousands`
+(`backend/app/core/ingest.py`). Known issue: the parser used to train
+`model/dalil_model.joblib` (10 Oct) read single-group values such as `"300.000"` as 300 UZS —
+3 196 of 139 534 amounts (2.3%, all below 1 mln UZS). Inference now reads them correctly; the
+model was not retrained for this release, and the eval report was re-run with the corrected
+parser.

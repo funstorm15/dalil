@@ -68,7 +68,7 @@ def names_match(a: str, b: str, threshold: float = 0.86) -> bool:
     """True when two name strings likely denote the same party.
 
     Handles transliteration variants, initials and token subsets (first name
-    missing). Uses difflib ratio over normalized strings plus token rules —
+    missing). Similarity is token-wise (each token needs a close partner) —
     deterministic, no external model needed.
     """
     import difflib
@@ -95,16 +95,27 @@ def names_match(a: str, b: str, threshold: float = 0.86) -> bool:
         if ta_x <= tb_x or tb_x <= ta_x:
             ta, tb = ta_x, tb_x
         if ta <= tb or tb <= ta:
-            # one is a subset ("temur" vs "temur karimov", "a karimov" handled
-            # by single-letter token check)
+            # one is a subset of the other
             shorter, longer = (ta, tb) if len(ta) <= len(tb) else (tb, ta)
             if len(shorter) == 1:
                 s = next(iter(shorter))
-                if len(s) == 1:  # initial
+                if len(s) == 1:  # initial: resolvable within a pair
                     return any(w.startswith(s) for w in longer)
-                return s in longer
+                # a lone generic token ("Karimov" vs "Temur Karimov") is too
+                # weak to claim identity — refuse rather than over-merge
+                return False
             return True
-    return difflib.SequenceMatcher(None, na, nb).ratio() >= threshold
+    # token-wise similarity: every token of the longer name needs a close
+    # partner — catches typos ("Abdurakhmon" ~ "Abdurahmon") without merging
+    # distinct prefix-related names ("Temur" vs "Temurbek"), which whole-string
+    # difflib would merge at 0.86
+    longer, shorter = (ta, tb) if len(ta) >= len(tb) else (tb, ta)
+    if not shorter:
+        return False
+    return all(
+        max(difflib.SequenceMatcher(None, w, v).ratio() for v in shorter) >= threshold
+        for w in longer
+    )
 
 
 def norm_phone(raw: str) -> str:
@@ -162,6 +173,99 @@ def parse_amount(raw: str | float | int) -> float:
         return float(num)
     except ValueError:
         return 0.0
+
+
+# --- strict amount parsing (analyst / jury input) ------------------------
+# Supported amount formats (documented in README "Input format"):
+#   strict           plain digits "43500000"; thousands grouped by space / nbsp /
+#                    apostrophe "43 500 000"; optional decimal part of 1-2 digits
+#                    with "." or "," ("43500000.50", "45,5"); both separators
+#                    together when unambiguous ("1.234.567,89", "1,234,567.89").
+#                    A single "." or "," followed by exactly 3 digits ("4,500",
+#                    "1.234") is AMBIGUOUS and rejected.
+#   dot-thousands    "." groups thousands, "," is decimal (UZ/RU bank exports).
+#   comma-thousands  "," groups thousands, "." is decimal (EN exports).
+# All formats accept a scale word "4,5 млн" / "4.5 mln" / "300 тыс" and an
+# optional currency suffix (UZS, сум, so'm). Anything else is rejected.
+AMOUNT_FORMATS = ("strict", "dot-thousands", "comma-thousands")
+_CURRENCY = re.compile(r"\s*(uzs|сум|сўм|so['ʻ’`]?m|sum)\.?\s*$", re.IGNORECASE)
+_SCALED = re.compile(r"^(\d+(?:[.,]\d+)?)\s*(млн|mln|million|тыс\.?|тыс|k)$", re.IGNORECASE)
+_SCALE = {"млн": 1e6, "mln": 1e6, "million": 1e6, "тыс": 1e3, "тыс.": 1e3, "k": 1e3}
+
+
+class AmountFormatError(ValueError):
+    """Amount text that cannot be read unambiguously in the chosen format."""
+
+
+def parse_amount_strict(raw: str | float | int, fmt: str = "strict") -> float:
+    """Parse a UZS amount without guessing; raise AmountFormatError on doubt."""
+    if fmt not in AMOUNT_FORMATS:
+        raise AmountFormatError(f"unknown amount format '{fmt}'")
+    if isinstance(raw, bool):
+        raise AmountFormatError("boolean is not an amount")
+    if isinstance(raw, (int, float)):
+        val = float(raw)
+    else:
+        s = str(raw).replace(" ", " ").replace(" ", " ").strip()
+        if not s:
+            raise AmountFormatError("amount is missing")
+        s = _CURRENCY.sub("", s).strip()
+        m = _SCALED.match(s)
+        if m:
+            val = float(m.group(1).replace(",", ".")) * _SCALE[m.group(2).lower()]
+        else:
+            val = _parse_plain(s, fmt)
+    if val != val or val in (float("inf"), float("-inf")):
+        raise AmountFormatError("amount is not a finite number")
+    if val <= 0:
+        raise AmountFormatError("amount must be a positive UZS number")
+    return val
+
+
+def _parse_plain(s: str, fmt: str) -> float:
+    if re.search(r"[^\d\s.,']", s):
+        raise AmountFormatError("contains characters that are not part of a number")
+    s = re.sub(r"(?<=\d)[\s'](?=\d{3}(?:\D|$))", "", s)  # space/apostrophe grouping
+    if re.search(r"\s|'", s):
+        raise AmountFormatError("thousands groups must have exactly 3 digits")
+    if not re.fullmatch(r"\d[\d.,]*", s) or s[-1] in ".,":
+        raise AmountFormatError("not a number")
+    if fmt == "dot-thousands":
+        group, dec = ".", ","
+    elif fmt == "comma-thousands":
+        group, dec = ",", "."
+    else:
+        dots, commas = s.count("."), s.count(",")
+        if dots and commas:  # both present: the last one is the decimal mark
+            dec = "." if s.rfind(".") > s.rfind(",") else ","
+            group = "," if dec == "." else "."
+        elif dots + commas == 0:
+            return float(s)
+        else:
+            sep = "." if dots else ","
+            if dots + commas > 1:  # repeated separator can only be grouping
+                group, dec = sep, ("," if sep == "." else ".")
+            else:
+                frac = s.split(sep)[1]
+                if len(frac) == 3:
+                    raise AmountFormatError(
+                        f"ambiguous separator: '{s}' could mean thousands or decimals — "
+                        "write it without the separator, group thousands with spaces, "
+                        "or choose an explicit amount format")
+                group, dec = ("," if sep == "." else "."), sep
+    if s.count(dec) > 1:
+        raise AmountFormatError(f"more than one decimal mark '{dec}'")
+    int_part, _, frac = s.partition(dec)
+    if frac and not frac.isdigit():
+        raise AmountFormatError("decimal part is not numeric")
+    if group in int_part:
+        groups = int_part.split(group)
+        if not (1 <= len(groups[0]) <= 3) or any(len(g) != 3 for g in groups[1:]):
+            raise AmountFormatError(f"thousands groups around '{group}' must have exactly 3 digits")
+        int_part = "".join(groups)
+    if not int_part.isdigit():
+        raise AmountFormatError("not a number")
+    return float(f"{int_part}.{frac}" if frac else int_part)
 
 
 def parse_ts(raw: str) -> datetime | None:

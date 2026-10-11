@@ -54,8 +54,8 @@ export default function SystemView() {
           />
           <Metric
             v={test.ensemble_at_band50_precision_at_prevalence?.precision ?? "—"}
-            l="precision @10% prevalence"
-            s="ensemble, band ≥50"
+            l="precision @ assumed 10% prevalence"
+            s="synthetic TPR/FPR × assumed base rate"
           />
           <Metric
             v={test.ensemble_at_band50_precision_at_prevalence?.recall ?? "—"}
@@ -65,7 +65,7 @@ export default function SystemView() {
           <Metric
             v={test.at_band_50?.rules?.fpr ?? "—"}
             l="rule-only FPR (test)"
-            s="the pain the model removes"
+            s="own synthetic baseline — not a bank's data"
           />
           <Metric
             v={test.at_band_50?.rules?.recall ?? "—"}
@@ -88,14 +88,14 @@ export default function SystemView() {
             s="deterministic stages"
           />
           <Metric
-            v={nar.mean_citation_precision ?? "—"}
-            l="narrative citation precision"
-            s={`${nar.sample_n ?? 0} notes, ${nar.mode ?? ""}`}
+            v={nar.drafts_fully_consistent != null ? `${nar.drafts_fully_consistent}/${nar.sample_n}` : "—"}
+            l="LLM drafts with 0 check issues"
+            s={`IDs exist ${nar.mean_citation_id_share ?? "—"} · numbers ${nar.mean_numeric_consistency ?? "—"} · meaning not checked`}
           />
           <Metric
             v={nar.llm_latency_ms ? `${(nar.llm_latency_ms.p50 / 1000).toFixed(1)} s` : "—"}
-            l="LLM narrative p50"
-            s={nar.avg_tokens?.prompt ? `~${nar.avg_tokens.prompt + nar.avg_tokens.completion} tokens` : ""}
+            l="LLM draft latency p50"
+            s={nar.llm_latency_ms ? `p95 ${(nar.llm_latency_ms.p95 / 1000).toFixed(1)} s · ${nar.truncated ?? 0} truncated` : ""}
           />
           <Metric v={tr.val_ece ?? "—"} l="calibration ECE (val)" s="isotonic-calibrated" />
           <Metric v={fail.fp_count ?? "—"} l="known FPs @ band 50" s="see failure list below" />
@@ -105,9 +105,9 @@ export default function SystemView() {
           <div className="note" style={{ marginTop: 12 }}>
             <b>Generalization:</b> model AUC {gen.model_auc_test} → {gen.model_auc_novel} on novel
             variants; ensemble recall {gen.ensemble_recall_test} → {gen.ensemble_recall_novel};
-            rule-layer recall {gen.rules_recall_test} → {gen.rules_recall_novel}. The rule layer is
-            what degrades — the model layer is why the product still works when criminals change
-            their pattern.
+            rule-layer recall {gen.rules_recall_test} → {gen.rules_recall_novel}. On these held-out
+            synthetic variants the rule layer degrades more than the model; behaviour on real bank
+            data is not measured.
           </div>
         )}
 
@@ -178,12 +178,12 @@ export default function SystemView() {
           </h3>
           <div className="arch">
             <div className="box">
-              <b>1 · Intake</b> — CSV/JSON/queue → normaliser (UZS amounts, dd.mm.yyyy, Latin/Cyrillic
-              names) → chronological case
+              <b>1 · Intake</b> — CSV/queue → strict validation (UZS amount formats, dates not in the
+              future, required columns, known categories; bad rows rejected with row numbers)
             </div>
             <div className="box">
               <b>2 · Entity resolution</b> — union-find over account / normalised name / phone;
-              transliteration-aware (Temur = Тemür = Тимур)
+              transliteration-aware (Темур Каримов = Temur Karimov), ambiguity-guarded
             </div>
             <div className="box">
               <b>3 · Features</b> — 49 analyst-readable features (threshold proximity, drain speed,
@@ -201,21 +201,23 @@ export default function SystemView() {
               <b>6 · Ensemble score</b> = 0.7·P(model) + 0.3·rule severity → band 0–100
             </div>
             <div className="box">
-              <b>7 · Narrative (local LLM)</b> — Qwen2.5-3B Q4 via llama.cpp, OpenAI-compatible
-              endpoint, evidence-only prompt
+              <b>7 · Note</b> — primary: template assembled only from the evidence list; optional
+              experimental draft from a local LLM (Qwen2.5-1.5B Q4 via llama.cpp)
             </div>
             <div className="box">
-              <b>8 · Citation verifier</b> — deterministic: every [E#] must exist, every money-scale
-              number must be in evidence; violations flagged
+              <b>8 · Note checks</b> — deterministic, reported separately: [E#] exists · numbers,
+              amounts and dates match the evidence cited in that sentence · meaning NOT verified.
+              Warnings only — nothing is blocked
             </div>
             <div className="box">
-              <b>9 · Decision + audit log</b> — human decision, score, check result → append-only
-              JSONL
+              <b>9 · Decision + export</b> — decision bound to analysis_id + input hash (JSONL file,
+              not tamper-proof); export built from the server record, SHA-256 per section
             </div>
             <div style={{ marginTop: 8 }} className="note">
-              <b>Data never leaves the perimeter:</b> the prototype ships llama.cpp + GGUF inside the
-              container; the same image runs on-prem. External API is not required at any step —
-              swapping in vLLM behind the same OpenAI-compatible URL is the production path.
+              <b>Local inference:</b> the LLM runs via llama.cpp on the same host — no external AI API
+              is called. The public demo is a laptop behind an ngrok tunnel serving synthetic data; it
+              is not a bank environment and its outbound traffic has not been audited. Production
+              needs a separate bank deployment, hardening, DR and model-risk validation.
             </div>
           </div>
         </div>
@@ -256,14 +258,20 @@ export default function SystemView() {
           <div className="card">
             <h3>Cost model</h3>
             {Object.keys(cost).length ? (
-              <div className="kv">
-                {Object.entries(cost).map(([k, v]) => (
-                  <div key={k} style={{ display: "contents" }}>
-                    <dt>{k.split("_").join(" ")}</dt>
-                    <dd>{typeof v === "object" ? JSON.stringify(v) : String(v)}</dd>
-                  </div>
-                ))}
-              </div>
+              <>
+                <div className="kv">
+                  {Object.entries(cost).map(([k, v]) => (
+                    <div key={k} style={{ display: "contents" }}>
+                      <dt>{k.split("_").join(" ")}</dt>
+                      <dd>{typeof v === "object" ? JSON.stringify(v) : String(v)}</dd>
+                    </div>
+                  ))}
+                </div>
+                <div className="small muted" style={{ marginTop: 8 }}>
+                  ⚠ $0 LLM API cost ≠ free operation (hardware cost above applies). Time savings,
+                  alert volume and ROI are planning assumptions — no bank pilot has measured them.
+                </div>
+              </>
             ) : (
               <div className="muted small">see README / system facts</div>
             )}
@@ -272,9 +280,9 @@ export default function SystemView() {
           <div className="card">
             <h3>Human-in-the-loop & audit</h3>
             <div className="small muted" style={{ lineHeight: 1.8 }}>
-              <div>· Model proposes score + draft note; <b>only a named analyst</b> records dismiss / escalate / STR.</div>
-              <div>· Narrative cannot go out unverified — citations and numbers are machine-checked.</div>
-              <div>· Every decision appends: case, score, rule hits, check result, model version.</div>
+              <div>· DALIL proposes a score and a note; <b>the analyst</b> records dismiss / escalate / STR with a required justification (name is self-declared, not authenticated).</div>
+              <div>· Machine checks: citation IDs exist; numbers/dates match cited evidence. The <b>meaning</b> of the wording is <b>not</b> machine-verified — the analyst reviews it.</div>
+              <div>· Each decision stores analysis_id, input hash, result hash, server score, check result, model version.</div>
               <div>· Failure cases are published above, not hidden.</div>
             </div>
           </div>

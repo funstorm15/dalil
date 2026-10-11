@@ -52,11 +52,13 @@ def build_entity_clusters(case: CaseRecord) -> dict[str, str]:
             find(key)
 
     keys = list(nodes)
+    tokens = {k: norm_name(nodes[k][0]).split() for k in keys}
     for i, a in enumerate(keys):
         for b in keys[i + 1:]:
             na, pa, _ = nodes[a]
             nb, pb, _ = nodes[b]
-            same = (pa and pb and pa == pb) or names_match(na, nb)
+            same = (pa and pb and pa == pb) or name_merge_ok(
+                na, nb, a, b, tokens)
             if same:
                 union(a, b)
 
@@ -71,6 +73,59 @@ def build_entity_clusters(case: CaseRecord) -> dict[str, str]:
         for m in mem:
             clusters[m] = cid
     return clusters
+
+def name_merge_ok(na: str, nb: str, key_a: str, key_b: str,
+                  tokens: dict[str, list[str]]) -> bool:
+    """Nameship decision with an ambiguity guard for abbreviated names.
+
+    Full names merge like normalize.names_match (transliteration / subset /
+    similarity). An abbreviated name ("T. Karimov") merges only when its
+    initial resolves to exactly one distinct person-name in this case among
+    nodes sharing a non-initial token — if both "Temur Karimov" and
+    "Temurbek Karimov" are present, nothing merges with "T. Karimov".
+    Candidates are counted by distinct normalized name, so spelling variants
+    of one person do not create false ambiguity.
+    """
+    if na == nb:
+        return True
+    ta, tb = tokens[key_a], tokens[key_b]
+    init_a = [t for t in ta if len(t) == 1]
+    init_b = [t for t in tb if len(t) == 1]
+    if not init_a and not init_b:
+        return names_match(na, nb)
+
+    def shares_long(x: list[str], y: list[str]) -> bool:
+        lx = [t for t in x if len(t) > 1]
+        ly = [t for t in y if len(t) > 1]
+        if not lx or not ly:
+            return True  # one side is initials-only
+        return bool(set(lx) & set(ly))
+
+    # ambiguity guard: each abbreviated side must resolve to exactly one
+    # distinct normalized name among the OTHER nodes of this case
+    for init, side, skip in ((init_a, ta, key_a), (init_b, tb, key_b)):
+        if not init:
+            continue
+        cands: set[str] = set()
+        for k, toks in tokens.items():
+            if k == skip:
+                continue
+            if all(any(w.startswith(i) and len(w) > 1 for w in toks) for i in init) \
+                    and shares_long(side, toks):
+                cands.add(" ".join(sorted(toks)))
+        if len(cands) != 1:
+            return False
+
+    long_a = [t for t in ta if len(t) > 1]
+    long_b = [t for t in tb if len(t) > 1]
+    if init_a and not init_b:
+        return (all(any(w.startswith(i) and len(w) > 1 for w in tb) for i in init_a)
+                and set(long_a) <= set(long_b))
+    if init_b and not init_a:
+        return (all(any(w.startswith(i) and len(w) > 1 for w in ta) for i in init_b)
+                and set(long_b) <= set(long_a))
+    return sorted(init_a) == sorted(init_b) and shares_long(ta, tb)
+
 
 FEATURE_KEYS: list[str] = [
     # volume / shape
@@ -124,7 +179,7 @@ def _median(vals: list[float]) -> float:
     return float(s[m]) if len(s) % 2 else (s[m - 1] + s[m]) / 2
 
 
-def extract_features(case: CaseRecord) -> dict[str, float]:
+def extract_features(case: CaseRecord, fill: dict[str, float] | None = None) -> dict[str, float]:
     txs = case.transactions
     subj = case.subject_account
     clusters = build_entity_clusters(case)
@@ -263,9 +318,17 @@ def extract_features(case: CaseRecord) -> dict[str, float]:
     f["memo_gambling_hits"] = float(hits.get("gambling", 0))
 
     # --- subject context
-    f["account_age_days"] = float(case.account_age_days)
-    f["declared_turnover_monthly"] = case.declared_turnover_monthly
-    f["volume_vs_turnover"] = total_in / max(case.declared_turnover_monthly * 3, 1.0)
+    # subject metadata: missing values are filled ONLY from an explicit `fill`
+    # map (the pipeline passes training medians and reports the imputation)
+    fill = fill or {}
+    age = case.account_age_days if case.account_age_days is not None else fill.get("account_age_days")
+    turnover = (case.declared_turnover_monthly if case.declared_turnover_monthly is not None
+                else fill.get("declared_turnover_monthly"))
+    if age is None or turnover is None:
+        raise ValueError("subject metadata missing and no explicit imputation supplied")
+    f["account_age_days"] = float(age)
+    f["declared_turnover_monthly"] = float(turnover)
+    f["volume_vs_turnover"] = total_in / max(float(turnover) * 3, 1.0)
     f["is_business"] = 1.0 if case.subject_kind == "business" else 0.0
 
     # --- balance behaviour

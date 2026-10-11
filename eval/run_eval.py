@@ -165,38 +165,66 @@ def latency_block() -> dict:
 
 
 def narrative_block(llm: LLMClient, sample_n: int = 20) -> dict:
+    """Experimental LLM drafts on held-out test cases, scored by core/verifier.py.
+
+    Reported separately: share of [E#] ids that exist; share of numbers/amounts/
+    dates matching the evidence cited in the same sentence; drafts with zero
+    check issues; truncated drafts; latency. Meaning is NOT measured here.
+    """
     rows = load("test")
     step = max(1, len(rows) // sample_n)
     sample = rows[::step][:sample_n]
-    precisions, invalid, unver = [], 0, 0
-    tokens_prompt, tokens_completion = [], []
-    lat = []
-    mode = "deterministic"
     health = llm.health(timeout=3.0)
+    id_share, num_cons, lat = [], [], []
+    consistent = truncated = unavailable = 0
+    invalid = unsupported = miscited = uncited = 0
+    tokens_prompt, tokens_completion = [], []
+    template_consistent = 0
     for r in sample:
         res, _ = analyze(r, llm=llm, want_narrative=True)
-        precisions.append(res.narrative_check.citation_precision)
-        invalid += len(res.narrative_check.invalid_citations)
-        unver += len(res.narrative_check.unverified_numbers)
+        template_consistent += res.narrative_check.status == "consistent"
+        d = res.llm_draft or {}
+        if d.get("status") == "unavailable" or not d.get("check"):
+            unavailable += 1
+            continue
+        c = d["check"]
+        lat.append(d["latency_ms"])
+        id_share.append(c["citation_precision"])
+        if c["numeric_consistency"] is not None:
+            num_cons.append(c["numeric_consistency"])
+        consistent += c["status"] == "consistent"
+        truncated += d["status"] == "truncated"
+        invalid += len(c["invalid_citations"])
+        unsupported += len(c["unsupported_numbers"])
+        miscited += len(c["miscited_numbers"])
+        uncited += len(c["uncited_numbers"])
         st = res.input_summary.get("llm") or {}
-        if st.get("available"):
-            mode = "llm"
-            lat.append(st.get("latency_ms", 0))
-            if st.get("prompt_tokens"):
-                tokens_prompt.append(st["prompt_tokens"])
-            if st.get("completion_tokens"):
-                tokens_completion.append(st["completion_tokens"])
+        if st.get("prompt_tokens"):
+            tokens_prompt.append(st["prompt_tokens"])
+        if st.get("completion_tokens"):
+            tokens_completion.append(st["completion_tokens"])
     block = {
-        "mode": mode,
+        "what": "experimental local-LLM drafts; meaning of claims is NOT measured",
         "llm_available": health.available,
         "llm_model": llm.model,
         "sample_n": len(sample),
-        "mean_citation_precision": round(sum(precisions) / len(precisions), 4) if precisions else None,
+        "drafts_scored": len(lat),
+        "drafts_unavailable": unavailable,
+        "drafts_fully_consistent": consistent,
+        "truncated": truncated,
+        "mean_citation_id_share": round(statistics.mean(id_share), 3) if id_share else None,
+        "mean_numeric_consistency": round(statistics.mean(num_cons), 3) if num_cons else None,
         "invalid_citations_total": invalid,
-        "unverified_numbers_total": unver,
+        "unsupported_numbers_total": unsupported,
+        "miscited_numbers_total": miscited,
+        "uncited_numbers_total": uncited,
+        "template_notes_consistent": f"{template_consistent}/{len(sample)}",
     }
     if lat:
-        block["llm_latency_ms"] = {"p50": round(statistics.median(lat), 0), "n": len(lat)}
+        srt = sorted(lat)
+        block["llm_latency_ms"] = {"p50": round(statistics.median(lat), 0),
+                                   "p95": round(srt[max(0, int(len(srt) * 0.95) - 1)], 0),
+                                   "max": round(max(lat), 0), "n": len(lat)}
         block["avg_tokens"] = {
             "prompt": int(statistics.mean(tokens_prompt)) if tokens_prompt else None,
             "completion": int(statistics.mean(tokens_completion)) if tokens_completion else None,

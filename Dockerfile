@@ -1,4 +1,6 @@
-# DALIL — container image: local LLM + API + SPA. Zero egress at runtime.
+# DALIL — container image: local LLM + API + SPA. No external AI API is called at runtime.
+# Runtime data lives in the container filesystem and is lost on restart unless mounted:
+#   docker run -v dalil-analyses:/app/data/analyses -v dalil-audit:/app/data/audit ...
 # Stage 1: build the SPA so deployment is fully "from the submitted repo".
 FROM node:20-slim AS web
 WORKDIR /web

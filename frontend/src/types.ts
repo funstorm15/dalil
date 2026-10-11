@@ -21,11 +21,30 @@ export interface StageTiming {
 }
 
 export interface NarrativeCheck {
-  citation_precision: number;
+  citation_precision: number; // share of [E#] ids that exist
   checked_citations: number;
   invalid_citations: string[];
   unverified_numbers: string[];
+  numbers_checked: number;
+  numbers_supported: number;
+  unsupported_numbers: string[];
+  miscited_numbers: string[];
+  uncited_numbers: string[];
+  numeric_consistency: number | null;
+  complete: boolean;
+  semantics: "not_verified";
+  status: "consistent" | "issues";
   mode: "llm" | "deterministic";
+}
+
+export interface LlmDraft {
+  status: "complete" | "truncated" | "unavailable";
+  text: string;
+  check: NarrativeCheck | null;
+  latency_ms: number;
+  model: string;
+  finish_reason?: string;
+  error?: string;
 }
 
 export interface AnalysisResult {
@@ -49,6 +68,9 @@ export interface AnalysisResult {
   timings: StageTiming[];
   total_ms: number;
   model_version: string;
+  analysis_id: string;
+  input_sha256: string;
+  llm_draft: LlmDraft | null;
   transactions: {
     id: string; ts: string; amount: number; direction: string;
     from_name: string; to_name: string; channel: string; memo: string;
@@ -62,6 +84,9 @@ export interface AnalysisResult {
     rule_component?: number;
     ml_weight?: number;
     rule_weight?: number;
+    warnings?: string[];
+    imputed?: Record<string, number>;
+    amount_format?: string;
   };
 }
 
@@ -109,4 +134,22 @@ export interface AuditEntry {
   analyst: string;
   note: string;
   model_version: string;
+  analysis_id?: string;
+  input_sha256?: string;
+  result_sha256?: string;
+}
+
+export interface StoredAnalysis {
+  result: AnalysisResult;
+  input_sha256: string;
+  result_sha256: string;
+  created_at: string;
+  decisions: AuditEntry[];
+}
+
+export interface VerifyResult {
+  ok: boolean;
+  integrity_ok: boolean;
+  problems: string[];
+  server_record: { status: "match" | "mismatch" | "not_found" | "no_analysis_id"; problems: string[] };
 }

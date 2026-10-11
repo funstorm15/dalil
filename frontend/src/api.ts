@@ -5,6 +5,8 @@ import type {
   Health,
   QueueCase,
   StageEvent,
+  StoredAnalysis,
+  VerifyResult,
 } from "./types";
 
 export async function getHealth(): Promise<Health> {
@@ -55,7 +57,7 @@ export interface AnalyzeHandlers {
 
 /** POST /api/analyze and consume the SSE stream (stage events live). */
 export async function analyze(
-  payload: { case_id?: string; csv_text?: string },
+  payload: { case_id?: string; csv_text?: string; amount_format?: string; llm_draft?: boolean },
   h: AnalyzeHandlers,
 ): Promise<void> {
   let res: Response;
@@ -112,16 +114,62 @@ export async function analyze(
   }
 }
 
+async function errorText(r: Response, fallback: string): Promise<string> {
+  try {
+    const j = await r.json();
+    return typeof j.detail === "string" ? j.detail : JSON.stringify(j.detail ?? j);
+  } catch {
+    return fallback;
+  }
+}
+
+/** Server-stored result + decisions of one analysis run (used after reload). */
+export async function getAnalysis(analysisId: string): Promise<StoredAnalysis | null> {
+  const r = await fetch(`/api/analysis/${encodeURIComponent(analysisId)}`);
+  if (!r.ok) return null;
+  return r.json();
+}
+
+/** Record a decision on a stored analysis. Score/checks come from the server record. */
 export async function sendDecision(payload: {
-  decision: { case_id: string; decision: string; analyst?: string; note?: string };
-  result?: unknown;
-}): Promise<boolean> {
-  const r = await fetch("/api/decision/full", {
+  analysis_id: string;
+  decision: string;
+  analyst: string;
+  note: string;
+}): Promise<{ ok: boolean; error?: string }> {
+  const r = await fetch("/api/decision", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
   });
-  return r.ok;
+  if (r.ok) return { ok: true };
+  return { ok: false, error: await errorText(r, `HTTP ${r.status}`) };
+}
+
+/** Export package built by the server from its own record of this analysis. */
+export async function exportBundle(analysisId: string): Promise<Record<string, any>> {
+  const r = await fetch("/api/export", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ analysis_id: analysisId }),
+  });
+  if (!r.ok) throw new Error(await errorText(r, `export failed (HTTP ${r.status})`));
+  return r.json();
+}
+
+/** Server re-check: integrity (hashes) and match against the stored analysis. */
+export async function verifyBundle(bundle: Record<string, any>): Promise<VerifyResult> {
+  const r = await fetch("/api/export/verify", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(bundle),
+  });
+  if (!r.ok) {
+    const msg = `HTTP ${r.status}`;
+    return { ok: false, integrity_ok: false, problems: [msg],
+      server_record: { status: "not_found", problems: [msg] } };
+  }
+  return r.json();
 }
 
 export const SAMPLE_CSV = `ts,amount,direction,counterparty_name,counterparty_kind,channel,memo

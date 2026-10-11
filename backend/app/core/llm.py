@@ -3,8 +3,9 @@
 The prototype ships with a local llama.cpp server serving an open-weight
 instruct model — the same interface a bank runs on-prem (vLLM / TGI expose the
 same OpenAI-compatible API, so production only changes LLM_BASE_URL).
-If the model is unavailable the pipeline degrades to a deterministic
-extractive narrative and says so — never a silent fake.
+The LLM output is an EXPERIMENTAL draft shown next to the deterministic
+evidence note; if the model is unavailable or the draft is cut off by the
+token limit, the UI says so.
 """
 from __future__ import annotations
 
@@ -29,6 +30,7 @@ class LLMStats:
     latency_ms: float = 0.0
     prompt_tokens: int = 0
     completion_tokens: int = 0
+    finish_reason: str = ""
     error: str = ""
 
 
@@ -50,7 +52,8 @@ class LLMClient:
                                        error=str(e)[:200])
         return self.last_stats
 
-    def chat(self, system: str, user: str, max_tokens: int = 360, temperature: float = 0.15) -> str:
+    def chat(self, system: str, user: str, max_tokens: int = 480, temperature: float = 0.15) -> str:
+        """Return the completion text; finish_reason ("stop" / "length") is in last_stats."""
         import time
 
         t0 = time.time()
@@ -71,6 +74,7 @@ class LLMClient:
         data = r.json()
         try:
             content = data["choices"][0]["message"]["content"]
+            finish = str(data["choices"][0].get("finish_reason") or "")
         except (KeyError, IndexError) as e:
             raise LLMUnavailable(f"malformed LLM response: {e}") from e
         usage = data.get("usage", {})
@@ -79,12 +83,13 @@ class LLMClient:
             latency_ms=round((time.time() - t0) * 1000, 1),
             prompt_tokens=int(usage.get("prompt_tokens", 0)),
             completion_tokens=int(usage.get("completion_tokens", 0)),
+            finish_reason=finish,
         )
         return content.strip()
 
 
 SYSTEM_PROMPT = (
-    "You are an AML (anti-money-laundering) case analyst at MKBANK, Tashkent. "
+    "You are an AML (anti-money-laundering) case analyst at a bank in Tashkent. "
     "You write investigation notes for a Level-2 compliance officer. "
     "RULES: Use ONLY facts from the numbered evidence list [E1], [E2] ... "
     "Never invent amounts, dates, names, ids or counts. "

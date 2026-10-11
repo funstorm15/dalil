@@ -14,6 +14,8 @@ from .features import REPORTING_THRESHOLD
 from .normalize import memo_hits, parse_ts
 from .schemas import CaseRecord, ScenarioHit
 
+RULESET_VERSION = "dalil-rules/1.0.0"  # bump when any SC-* logic changes
+
 RULES_DOC = {
     "SC-01": "Cash structuring: repeated deposits just below the UZS 50,000,000 cash-reporting threshold from multiple senders (FATF: structuring / smurfing).",
     "SC-02": "Rapid pass-through: >70% of each inflow leaves the account again within 24 hours; balance stays near zero (FATF: layering / rapid movement of funds).",
@@ -85,7 +87,12 @@ def run_scenarios(case: CaseRecord) -> list[ScenarioHit]:
 
     # SC-03 mule fan-in
     person_in_count = len({cp(t) for t in ins if t.from_kind == "person"})
-    if person_in_count >= 8 and case.account_age_days <= 90:
+    if case.account_age_days is None:
+        hits.append(ScenarioHit(code="SC-03", name="Mule fan-in on a young account",
+                                name_uz="Pul yutuvchi hisobga ko'p kirim", matched=False,
+                                detail=f"NOT EVALUATED — account age not provided "
+                                       f"(person senders={person_in_count})"))
+    elif person_in_count >= 8 and case.account_age_days <= 90:
         hits.append(ScenarioHit(
             code="SC-03", name="Mule fan-in on a young account", name_uz="Pul yutuvchi hisobga ko'p kirim",
             matched=True, severity=min(1.0, 0.4 + 0.04 * person_in_count),
@@ -158,8 +165,12 @@ def run_scenarios(case: CaseRecord) -> list[ScenarioHit]:
 
     # SC-06 turnover mismatch
     turnover = case.declared_turnover_monthly
-    ratio = total_in / max(turnover * 3, 1.0)
-    if turnover > 0 and ratio >= 4.0:
+    ratio = total_in / max((turnover or 0.0) * 3, 1.0)
+    if turnover is None:
+        hits.append(ScenarioHit(code="SC-06", name="Inflow vs declared turnover mismatch",
+                                name_uz="Omonat va deklaratsiya qilingan aylanma mos kelmasligi",
+                                matched=False, detail="NOT EVALUATED — declared turnover not provided"))
+    elif turnover > 0 and ratio >= 4.0:
         hits.append(ScenarioHit(
             code="SC-06", name="Inflow vs declared turnover mismatch", name_uz="Omonat va deklaratsiya qilingan aylanma mos kelmasligi",
             matched=True, severity=min(1.0, 0.3 + 0.1 * (ratio - 4)),

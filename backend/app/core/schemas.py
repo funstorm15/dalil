@@ -19,7 +19,7 @@ class Transaction(BaseModel):
     to_account: str
     to_name: str
     to_kind: Literal["person", "business", "subject"] = "person"
-    channel: Literal["p2p", "cash_in", "cash_out", "atm", "card", "pos", "merchant", "wire"] = "p2p"
+    channel: Literal["p2p", "cash_in", "cash_out", "atm", "card", "pos", "merchant", "wire", "unknown"] = "p2p"
     memo: str = ""
     phone: str = ""
     geo: str = ""
@@ -32,8 +32,8 @@ class CaseRecord(BaseModel):
     subject_account: str
     subject_name: str
     subject_kind: Literal["person", "business"] = "person"
-    account_age_days: int = 400
-    declared_turnover_monthly: float = 0.0
+    account_age_days: int | None = None  # None = not provided (never invented)
+    declared_turnover_monthly: float | None = None
     branch: str = ""
     alert_source: str = "scenario-engine"
     opened_at: str = ""
@@ -42,6 +42,8 @@ class CaseRecord(BaseModel):
     is_suspicious: bool = False
     split: str = "demo"
     generator_variant: str = "base"  # base | novel (held-out pattern variants)
+    input_notes: list[str] = Field(default_factory=list)  # non-fatal input caveats
+    amount_format: str = "strict"
 
 
 class ScenarioHit(BaseModel):
@@ -73,10 +75,21 @@ class StageTiming(BaseModel):
 
 
 class NarrativeCheck(BaseModel):
-    citation_precision: float
+    """Separate statuses — see core/verifier.py. Meaning is never machine-verified."""
+
+    citation_precision: float  # share of [E#] ids that exist in the evidence pack
     checked_citations: int
     invalid_citations: list[str] = Field(default_factory=list)
-    unverified_numbers: list[str] = Field(default_factory=list)
+    unverified_numbers: list[str] = Field(default_factory=list)  # union of the three lists below
+    numbers_checked: int = 0  # numbers + amounts + ISO dates found in the note
+    numbers_supported: int = 0  # matched a value in evidence cited in the same sentence
+    unsupported_numbers: list[str] = Field(default_factory=list)  # in no evidence item
+    miscited_numbers: list[str] = Field(default_factory=list)  # only in non-cited evidence
+    uncited_numbers: list[str] = Field(default_factory=list)  # sentence has no citation
+    numeric_consistency: float | None = None  # supported / checked
+    complete: bool = True  # False when generation hit the token limit
+    semantics: Literal["not_verified"] = "not_verified"
+    status: Literal["consistent", "issues"] = "issues"
     mode: Literal["llm", "deterministic"] = "llm"
 
 
@@ -97,13 +110,21 @@ class AnalysisResult(BaseModel):
     model_version: str
     transactions: list[dict[str, Any]] = Field(default_factory=list)
     input_summary: dict[str, Any]
+    # experimental local-LLM draft (text, status, check, latency) — never the primary note
+    llm_draft: dict[str, Any] | None = None
+    # server-side identity of THIS analysis run (set by the API, see core/store.py)
+    analysis_id: str = ""
+    input_sha256: str = ""
 
 
 class DecisionIn(BaseModel):
-    case_id: str
+    """Analyst decision on ONE stored analysis. The analyst name is self-declared
+    (typed by the user) — it is not an authenticated identity."""
+
+    analysis_id: str = Field(min_length=8, max_length=64)
     decision: Literal["dismiss", "escalate", "file_str", "request_info"]
-    analyst: str = "demo-analyst"
-    note: str = ""
+    analyst: str = Field(min_length=2, max_length=80)
+    note: str = Field(min_length=10, max_length=2000)  # justification, required
 
 
 class AuditEntry(BaseModel):
@@ -111,10 +132,13 @@ class AuditEntry(BaseModel):
     case_id: str
     score: float
     decision: str
-    analyst: str
+    analyst: str  # self-declared name, not authenticated
     note: str = ""
     narrative_check: dict[str, Any] = Field(default_factory=dict)
     model_version: str = ""
+    analysis_id: str = ""
+    input_sha256: str = ""
+    result_sha256: str = ""
 
 
 class AnalyzeRequest(BaseModel):
@@ -122,4 +146,5 @@ class AnalyzeRequest(BaseModel):
 
     case_id: str | None = None
     csv_text: str | None = None
-    case_name: str | None = None
+    amount_format: Literal["strict", "dot-thousands", "comma-thousands"] = "strict"
+    llm_draft: bool = True  # also request the experimental local-LLM draft

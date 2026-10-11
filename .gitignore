@@ -15,3 +15,10 @@ llama.cpp/
 *.log
 audit/*.jsonl
 .DS_Store
+# local working material (Tahlil reference with its own .git, overnight notes) — not part of the release
+work/
+# runtime data written by the API (analyses + decision log)
+data/analyses/
+data/audit/
+# build artefacts
+frontend/tsconfig.tsbuildinfo

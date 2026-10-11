@@ -1,4 +1,9 @@
-"""Append-only audit log of analyst decisions (JSONL on disk)."""
+"""Decision log: one JSON line per analyst decision, opened in append mode.
+
+This is an ordinary file — anyone with write access to the disk can edit it.
+It is NOT a tamper-proof or immutable audit trail; each entry carries the
+analysis_id and the SHA-256 of the input and of the stored result it refers to.
+"""
 from __future__ import annotations
 
 import json
@@ -23,7 +28,9 @@ def append(entry: AuditEntry, path: Path | None = None) -> AuditEntry:
 
 
 def record_decision(case_id: str, score: float, decision: str, analyst: str, note: str,
-                    narrative_check: dict, model_version: str, path: Path | None = None) -> AuditEntry:
+                    narrative_check: dict, model_version: str, path: Path | None = None,
+                    analysis_id: str = "", input_sha256: str = "",
+                    result_sha256: str = "") -> AuditEntry:
     entry = AuditEntry(
         ts=datetime.now(UTC).isoformat(),
         case_id=case_id,
@@ -33,8 +40,30 @@ def record_decision(case_id: str, score: float, decision: str, analyst: str, not
         note=note,
         narrative_check=narrative_check,
         model_version=model_version,
+        analysis_id=analysis_id,
+        input_sha256=input_sha256,
+        result_sha256=result_sha256,
     )
     return append(entry, path)
+
+
+def for_analysis(analysis_id: str, path: Path | None = None) -> list[dict]:
+    """All decisions recorded for one analysis_id, oldest first (full file scan)."""
+    p = path or DEFAULT_PATH
+    rows: list[dict] = []
+    if p.exists():
+        with p.open(encoding="utf-8") as f:
+            for line in f:
+                line = line.strip()
+                if not line:
+                    continue
+                try:
+                    row = json.loads(line)
+                except json.JSONDecodeError:
+                    continue
+                if row.get("analysis_id") == analysis_id:
+                    rows.append(row)
+    return rows
 
 
 def tail(limit: int = 50, path: Path | None = None) -> list[dict]:

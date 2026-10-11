@@ -1,0 +1,12 @@
+ts,amount,direction,counterparty_name,counterparty_kind,phone
+01.06.2026 10:00,15000000,in,Темур Каримов,person,+998901234567
+03.06.2026 11:00,14000000,in,Temur Karimov,person,+998901234567
+05.06.2026 12:00,13000000,in,A. Karimov,person,
+07.06.2026 13:00,12000000,in,Abdurahmon Karimov,person,
+09.06.2026 14:00,11000000,in,Aziz Karimov,person,
+11.06.2026 15:00,10000000,in,Dilnoza Yusupova,person,+998907654321
+13.06.2026 16:00,9000000,out,Savdo Markaz MChJ,business,
+15.06.2026 17:00,8000000,out,Savdo Markaz,business,
+17.06.2026 18:00,7000000,out,Chorsu Savdo MChJ,business,
+19.06.2026 19:00,6000000,out,Nodira Yusupova,person,
+21.06.2026 20:00,5000000,out,Temurbek Karimov,person,

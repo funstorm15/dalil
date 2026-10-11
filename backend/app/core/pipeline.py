@@ -78,7 +78,8 @@ def decision_hint(score: float) -> str:
 
 
 def build_evidence(case, features: dict[str, float], hits: list[ScenarioHit],
-                   top_features: list[dict]) -> list[EvidenceItem]:
+                   top_features: list[dict], score: float, cal_p: float, rc: float,
+                   imputed: dict[str, float]) -> list[EvidenceItem]:
     ev: list[EvidenceItem] = []
     n = 0
 
@@ -89,41 +90,62 @@ def build_evidence(case, features: dict[str, float], hits: list[ScenarioHit],
         ev.append(EvidenceItem(id=eid, kind=kind, text=text, ref=ref))
         return eid
 
-    add("subject",
-        f"Subject: {case.subject_name} ({case.subject_kind}, account age "
-        f"{case.account_age_days} d, declared turnover "
-        f"{case.declared_turnover_monthly / 1e6:.0f} mln UZS/month, branch {case.branch or 'n/a'})",
-        case.subject_account)
+    age = (f"account age {case.account_age_days} d" if case.account_age_days is not None
+           else "account age NOT PROVIDED")
+    turnover = (f"declared turnover {case.declared_turnover_monthly / 1e6:.1f} mln UZS/month"
+                if case.declared_turnover_monthly is not None else "declared turnover NOT PROVIDED")
+    add("subject", f"Subject: {case.subject_name} ({case.subject_kind}, {age}, {turnover}, "
+                   f"branch {case.branch or 'n/a'})", case.subject_account)
+    matched = [h for h in hits if h.matched]
+    imp = (f"; model inputs imputed with training medians for: {', '.join(sorted(imputed))}"
+           if imputed else "")
+    add("model", f"Model output: DALIL score {score:.1f}/100 ({band(score)}), calibrated ML "
+                 f"probability {cal_p:.2f}, rule component {rc:.2f}, typology rules matched "
+                 f"{len(matched)} of {len(hits)}{imp}", "score")
+    txs = case.transactions
+    ins = [t for t in txs if t.direction == "in"]
+    outs = [t for t in txs if t.direction == "out"]
+    cps = {(t.from_name if t.direction == "in" else t.to_name) for t in txs}
+    period = f"{txs[0].ts[:10]} to {txs[-1].ts[:10]}" if txs else "n/a"
+    add("aggregate", f"Case window: {len(txs)} transactions ({len(ins)} in, {len(outs)} out) "
+                     f"from {period}; inflow total {sum(t.amount for t in ins) / 1e6:.1f} mln UZS; "
+                     f"outflow total {sum(t.amount for t in outs) / 1e6:.1f} mln UZS; "
+                     f"{len(cps)} distinct counterparty names", "window")
     for tf in top_features[:4]:
         add("feature", f"{tf['feature']} = {fmt_feature(tf['feature'], tf['value'])} "
                        f"(score impact {tf['impact']:+.1f} pp)", tf["feature"])
-    for h in hits:
-        if h.matched:
-            add("scenario", f"{h.code} {h.name}: {h.detail}", h.code)
+    for h in matched:
+        add("scenario", f"{h.code} {h.name}: {h.detail}", h.code)
 
-    # notable transactions: biggest in/out + scenario-referenced
-    tx_by_id = {t.id: t for t in case.transactions}
+    # notable transactions: scenario-referenced first, then the largest
+    tx_by_id = {t.id: t for t in txs}
     cited: set[str] = set()
     for h in hits:
         for tid in h.evidence:
             if tid in tx_by_id and tid not in cited:
                 cited.add(tid)
-                t = tx_by_id[tid]
-                add("transaction", _tx_text(t), t.id)
+                add("transaction", _tx_text(tx_by_id[tid]), tid)
                 if len(cited) >= 5:
                     break
         if len(cited) >= 5:
             break
     if len(cited) < 3:
-        for t in sorted(case.transactions, key=lambda x: -x.amount)[:4]:
+        for t in sorted(txs, key=lambda x: -x.amount)[:4]:
             if t.id not in cited:
                 add("transaction", _tx_text(t), t.id)
                 cited.add(t.id)
     return ev
 
 
+def counterparty(t: Transaction) -> tuple[str, str]:
+    """(name, kind) of the party on the OTHER side from the subject."""
+    if t.direction == "in":
+        return t.from_name, t.from_kind
+    return t.to_name, t.to_kind
+
+
 def _tx_text(t: Transaction) -> str:
-    cp_name = t.to_name if t.direction == "in" else t.from_name
+    cp_name, _ = counterparty(t)
     side = "from" if t.direction == "in" else "to"
     memo = f", memo='{t.memo}'" if t.memo else ""
     return (f"tx {t.id} {t.ts} {t.direction} {t.amount / 1e6:.1f} mln UZS "
@@ -132,26 +154,30 @@ def _tx_text(t: Transaction) -> str:
 
 def deterministic_narrative(case, hits: list[ScenarioHit], evidence: list[EvidenceItem],
                             score: float) -> str:
-    matched = [h for h in hits if h.matched]
-    lines = ["**1) SUMMARY** (deterministic extract — LLM offline)",
-             f"Case {case.case_id}: DALIL score {score:.0f}/100 ({band(score)}) over "
-             f"{len(case.transactions)} transactions; "
-             f"{len(matched)} of {len(hits)} typology rules matched [E1].", ""]
+    """Template note assembled only from evidence text — the primary note."""
+    by_kind: dict[str, list[EvidenceItem]] = {}
+    for e in evidence:
+        by_kind.setdefault(e.kind, []).append(e)
+    model_ev = by_kind["model"][0]
+    agg_ev = by_kind["aggregate"][0]
+    lines = ["**1) SUMMARY** (template — assembled from evidence, no LLM)",
+             f"{model_ev.text} [{model_ev.id}].",
+             f"{agg_ev.text} [{agg_ev.id}].", ""]
     lines.append("**2) TYPOLOGY**")
-    sc_ev = {e.ref: e.id for e in evidence if e.kind == "scenario"}
-    if matched:
-        for h in matched:
-            cid = sc_ev.get(h.code, "E1")
-            lines.append(f"- {h.code} {h.name}: {h.detail} [{cid}]")
+    if by_kind.get("scenario"):
+        for e in by_kind["scenario"]:
+            lines.append(f"- {e.text} [{e.id}]")
     else:
-        lines.append("No rule fully matched; score is driven by behavioural features [E1].")
+        lines.append(f"- No typology rule matched; the score is driven by behavioural features [{model_ev.id}].")
     lines += ["", "**3) KEY EVIDENCE**"]
-    for e in evidence[1:6]:
+    for e in by_kind.get("feature", [])[:3] + by_kind.get("transaction", [])[:3]:
         lines.append(f"- {e.text} [{e.id}]")
+    subj = by_kind["subject"][0]
     lines += ["", "**4) NEXT STEPS**",
-              f"- {'Escalate to L2' if score >= 50 else 'Document dismissal rationale'} and "
-              f"verify counterparty identity manually [E1]",
-              "- Compare with prior 12-month history and KYC file (outside this prototype)."]
+              f"- {'Review for escalation to L2' if score >= 50 else 'Review and document the rationale'}; "
+              f"verify counterparty identities against KYC [{subj.id}].",
+              "- Compare with prior account history (outside this prototype).",
+              "- The analyst decides; this note does not establish that laundering occurred."]
     return "\n".join(lines)
 
 
@@ -191,8 +217,14 @@ def analyze(raw: dict, llm: LLMClient | None = None, want_narrative: bool = True
         for k, cid in clusters.items():
             merged.setdefault(cid, []).append(k)
         merged_groups = [v for v in merged.values() if len(v) > 1]
+    imputed: dict[str, float] = {}
     with stage("features"):
-        features = extract_features(case)
+        medians = _bundle().get("medians") or {}
+        if case.account_age_days is None:
+            imputed["account_age_days"] = float(medians.get("account_age_days", 0.0))
+        if case.declared_turnover_monthly is None:
+            imputed["declared_turnover_monthly"] = float(medians.get("declared_turnover_monthly", 0.0))
+        features = extract_features(case, fill=imputed)
     with stage("scenarios"):
         hits = run_scenarios(case)
     with stage("model"):
@@ -202,37 +234,45 @@ def analyze(raw: dict, llm: LLMClient | None = None, want_narrative: bool = True
         rc = rule_component(hits)
         score = 100.0 * (ML_WEIGHT * cal_p + RULE_WEIGHT * rc)
 
-    evidence = build_evidence(case, features, hits, top)
+    evidence = build_evidence(case, features, hits, top, score, cal_p, rc, imputed)
+    narrative = deterministic_narrative(case, hits, evidence, score)
 
-    with stage("narrative"):
-        narrative = ""
-        mode = "deterministic"
-        llm_stats = None
+    llm_draft: dict | None = None
+    llm_stats = None
+    with stage("narrative", "experimental local-LLM draft" if want_narrative else "skipped"):
         if want_narrative:
             case_brief = (
-                f"case_id={case.case_id}; subject={case.subject_name} "
-                f"({case.subject_kind}); window={len(case.transactions)} txs; "
-                f"DALIL score={score:.0f}/100 ({band(score)}); "
-                f"ML probability={cal_p:.2f}; rule component={rc:.2f}; "
-                f"account_age={case.account_age_days}d."
+                f"case_id={case.case_id}; subject={case.subject_name} ({case.subject_kind}). "
+                "All numbers are in the evidence list; cite them."
             )
             ev_lines = [f"[{e.id}] ({e.kind}) {e.text}" for e in evidence]
             client = llm or LLMClient()
+            t0 = time.perf_counter()
             try:
-                narrative = client.chat(SYSTEM_PROMPT, build_user_prompt(case_brief, ev_lines))
-                mode = "llm"
+                text = client.chat(SYSTEM_PROMPT, build_user_prompt(case_brief, ev_lines))
                 llm_stats = client.last_stats
+                complete = llm_stats.finish_reason != "length"
+                check_d = verify_narrative(text, evidence, complete=complete)
+                llm_draft = {
+                    "status": "complete" if complete else "truncated",
+                    "text": text,
+                    "check": check_d.model_dump(),
+                    "latency_ms": round((time.perf_counter() - t0) * 1000, 1),
+                    "model": client.model,
+                    "finish_reason": llm_stats.finish_reason,
+                }
+                if not complete:
+                    events[-1]["detail"] = "LLM draft hit the token limit — marked INCOMPLETE"
             except LLMUnavailable as e:
-                narrative = deterministic_narrative(case, hits, evidence, score)
                 llm_stats = client.last_stats
-                events[-1]["detail"] = f"LLM unavailable ({e}); deterministic fallback used"
-        else:
-            narrative = deterministic_narrative(case, hits, evidence, score)
-            events[-1]["detail"] = "narrative skipped (evaluation mode)"
+                llm_draft = {"status": "unavailable", "text": "", "check": None,
+                             "latency_ms": round((time.perf_counter() - t0) * 1000, 1),
+                             "model": client.model, "error": str(e)[:200]}
+                events[-1]["detail"] = f"LLM unavailable ({e}); template note only"
 
     with stage("verify"):
         check = verify_narrative(narrative, evidence)
-        check.mode = mode  # type: ignore[assignment]
+        check.mode = "deterministic"
 
     total_ms = (time.perf_counter() - t_start) * 1000
     top_features = [
@@ -240,11 +280,15 @@ def analyze(raw: dict, llm: LLMClient | None = None, want_narrative: bool = True
          "impact": t["impact"], "baseline": t["baseline"]}
         for t in top
     ]
+    hint = decision_hint(score)
+    if imputed:
+        hint = (f"PROVISIONAL — {', '.join(sorted(imputed))} not provided (model inputs imputed); "
+                f"score-based hint: {hint}")
     result = AnalysisResult(
         case_id=case.case_id,
         score=round(score, 1),
         risk_band=band(score),  # type: ignore[arg-type]
-        decision_hint=decision_hint(score),
+        decision_hint=hint,
         suspicious=score >= 50,
         features={k: round(v, 4) for k, v in features.items()},
         top_features=top_features,
@@ -256,6 +300,7 @@ def analyze(raw: dict, llm: LLMClient | None = None, want_narrative: bool = True
         total_ms=round(total_ms, 1),
         model_version=str(_bundle().get("version", "unknown")),
         transactions=[t.model_dump() for t in case.transactions],
+        llm_draft=llm_draft,
         input_summary={
             "n_tx": len(case.transactions),
             "n_counterparty_clusters": len(set(clusters.values())),
@@ -266,6 +311,28 @@ def analyze(raw: dict, llm: LLMClient | None = None, want_narrative: bool = True
             "ml_weight": ML_WEIGHT,
             "generated_at": datetime.now(UTC).isoformat(),
             "llm": llm_stats.__dict__ if llm_stats else None,
+            "imputed": imputed,
+            "amount_format": case.amount_format,
+            "warnings": _input_warnings(case, imputed),
         },
     )
     return result, events
+
+
+def _input_warnings(case, imputed: dict[str, float] | None = None) -> list[str]:
+    """Honest caveats surfaced in the UI — never silently swallowed."""
+    w: list[str] = list(case.input_notes)
+    n = len(case.transactions)
+    if n < 5:
+        w.append(f"only {n} transactions — behavioural features are unreliable on thin history")
+    if case.declared_turnover_monthly is None:
+        w.append("declared turnover not provided — SC-06 not evaluated; model input imputed with the "
+                 f"training median ({(imputed or {}).get('declared_turnover_monthly', 0) / 1e6:.1f} mln UZS/month)")
+    if case.account_age_days is None:
+        w.append("account age not provided — SC-03 not evaluated; model input imputed with the "
+                 f"training median ({(imputed or {}).get('account_age_days', 0):.0f} d)")
+    if imputed:
+        w.append("score uses imputed subject metadata — treat the recommendation as provisional")
+    if case.subject_name.strip().lower() in ("", "subject account", "subj"):
+        w.append("subject name not provided — shown as 'Subject account'")
+    return w

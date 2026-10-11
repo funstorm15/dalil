@@ -175,38 +175,50 @@
   },
   "latency": {
     "pipeline_no_llm_ms": {
-      "p50": 108.0,
-      "p95": 180.9,
-      "max": 338.0,
+      "p50": 188.9,
+      "p95": 310.4,
+      "max": 1335.2,
       "n": 60
     },
     "stage_p50_ms": {
-      "ingest": 0.82,
-      "entities": 15.37,
-      "features": 14.69,
-      "scenarios": 0.4,
-      "model": 77.12,
-      "score": 0.0,
-      "narrative": 0.01,
-      "verify": 0.07
-    }
+      "ingest": 1.96,
+      "entities": 30.63,
+      "features": 29.75,
+      "scenarios": 0.8,
+      "model": 122.22,
+      "score": 0.01,
+      "narrative": 0.0,
+      "verify": 1.06
+    },
+    "conditions": "re-measured 11 Oct ~07:15 with OMP_NUM_THREADS=1 (as the demo API runs), laptop power profile 'power-saver'; the full eval run (default OpenMP threads) measured p50 830.3 ms"
   },
   "narrative": {
-    "mode": "llm",
+    "what": "experimental local-LLM drafts; meaning of claims is NOT measured",
     "llm_available": true,
     "llm_model": "dalil-qwen",
     "sample_n": 20,
-    "mean_citation_precision": 0.95,
+    "drafts_scored": 20,
+    "drafts_unavailable": 0,
+    "drafts_fully_consistent": 0,
+    "truncated": 2,
+    "mean_citation_id_share": 0.95,
+    "mean_numeric_consistency": 0.2,
     "invalid_citations_total": 0,
-    "unverified_numbers_total": 1,
+    "unsupported_numbers_total": 17,
+    "miscited_numbers_total": 53,
+    "uncited_numbers_total": 159,
+    "template_notes_consistent": "20/20",
     "llm_latency_ms": {
-      "p50": 24874.0,
+      "p50": 18534.0,
+      "p95": 27197.0,
+      "max": 28182.0,
       "n": 20
     },
     "avg_tokens": {
-      "prompt": 1206,
-      "completion": 324
-    }
+      "prompt": 1313,
+      "completion": 337
+    },
+    "conditions": "LLM: Qwen2.5-1.5B Q4, llama.cpp 4 threads, laptop power profile 'power-saver', quiet machine"
   },
   "failures": {
     "false_positives_at_50": [

@@ -32,7 +32,9 @@ export default function App() {
       <header className="topbar">
         <div className="brand">
           <h1>DALIL</h1>
-          <span className="sub">AML investigation copilot · MKBANK FCC — alert investigation desk</span>
+          <span className="sub">
+            AML investigation copilot · synthetic demo · MKBANK: proposed pilot client
+          </span>
         </div>
         <nav className="tabs">
           <button className={`tab ${tab === "queue" ? "active" : ""}`} onClick={() => setTab("queue")}>
@@ -52,8 +54,8 @@ export default function App() {
           <span className={`dot ${health?.llm?.available ? "" : "off"}`} />
           {health
             ? health.llm.available
-              ? `local LLM · ${health.llm.model}`
-              : "LLM offline · deterministic mode"
+              ? `local LLM up · ${health.llm.model} (experimental drafts)`
+              : "LLM offline · template note only"
             : "backend offline"}
         </div>
       </header>

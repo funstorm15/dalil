@@ -126,12 +126,13 @@ export default function QueueView({ onOpen }: { onOpen: (id: string) => void }) 
           <div className="card">
             <h3>Human-in-the-loop</h3>
             <div className="note">
-              DALIL ranks and drafts; <b>a named analyst decides</b>. Every decision (dismiss /
-              escalate / STR) is appended to an audit log with the score, the rule hits and the
-              narrative-verification result.
+              DALIL ranks and drafts; <b>the analyst decides</b> (name is self-declared, not
+              authenticated). Each decision is appended to a JSONL decision log on the server, bound
+              to the analysis_id and input hash, with the server-side score and note-check result.
+              The log is an ordinary file — not tamper-proof.
             </div>
             <div style={{ marginTop: 10 }} className="small muted">
-              Session decisions so far: <b>{audit.length}</b>
+              Recent decisions on this server: <b>{audit.length}</b>
             </div>
             <div className="evi-list" style={{ marginTop: 8, maxHeight: 240 }}>
               {audit.map((a, i) => (

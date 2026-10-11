@@ -9,6 +9,7 @@ from fastapi.responses import StreamingResponse
 
 from .. import config
 from ..core import audit as audit_log
+from ..core import store
 from ..core.llm import LLMClient
 from ..core.pipeline import analyze
 from ..core.schemas import AnalyzeRequest, DecisionIn
@@ -65,7 +66,7 @@ def health() -> dict:
         "model_version": _model_version(),
         "llm": st.__dict__,
         "queue_size": len(load_queue()),
-        "audit_entries": len(audit_log.tail(200)),
+        "audit_entries": len(audit_log.tail(200, path=config.AUDIT_PATH)),
     }
 
 
@@ -107,34 +108,45 @@ def get_case(case_id: str) -> dict:
     raise HTTPException(404, "case not found")
 
 
+def _demo_case(case_id: str) -> dict | None:
+    return next((r for r in _load_cases_file("cases_demo.jsonl") if r["case_id"] == case_id), None)
+
+
 @router.post("/analyze")
 async def analyze_endpoint(req: AnalyzeRequest, request: Request) -> StreamingResponse:
-    raw: dict | None = None
+    """Analyse a demo case or a CSV. Every run gets a new analysis_id; the server
+    stores the exact input, its SHA-256 and the computed result."""
+    from ..core.ingest import InputValidationError, case_from_csv
+
     if req.case_id:
-        raw = None
-        for r in _load_cases_file("cases_demo.jsonl"):
-            if r["case_id"] == req.case_id:
-                raw = r
-                break
+        raw = _demo_case(req.case_id)
         if raw is None:
             raise HTTPException(404, "case not found")
+        inp = store.input_record("synthetic_case", raw)
     elif req.csv_text:
         if len(req.csv_text.encode()) > config.MAX_CSV_BYTES:
             raise HTTPException(413, "CSV too large")
-        from ..core.ingest import case_from_csv
+        inp = store.input_record("csv_input", req.csv_text, req.amount_format)
+        case_id = f"CSV-{store.sha256_json(inp)[:12]}"
         try:
-            case = case_from_csv(req.csv_text, case_id="JURY-INPUT")
-        except Exception as e:  # noqa: BLE001 — surface parse errors to the analyst
-            raise HTTPException(422, f"CSV parse error: {e}") from e
+            case = case_from_csv(req.csv_text, case_id=case_id, amount_format=req.amount_format)
+        except InputValidationError as e:
+            more = f" (+{len(e.errors) - 8} more)" if len(e.errors) > 8 else ""
+            raise HTTPException(422, "Input rejected — " + "; ".join(e.errors[:8]) + more) from e
+        except Exception as e:  # noqa: BLE001 — malformed CSV structure
+            raise HTTPException(422, f"Input rejected — CSV could not be read: {e}") from e
         raw = case.model_dump()
     else:
         raise HTTPException(422, "case_id or csv_text required")
-
+    input_sha = store.sha256_json(inp)
+    analysis_id = store.new_analysis_id()
     llm = get_llm()
 
     def gen():
         import queue as _q
         import threading
+
+        from ..core.ingest import InputValidationError
 
         ev_q: _q.Queue = _q.Queue()
         box: dict = {}
@@ -142,9 +154,14 @@ async def analyze_endpoint(req: AnalyzeRequest, request: Request) -> StreamingRe
         def run() -> None:
             t0 = time.perf_counter()
             try:
-                result, _events = analyze(raw, llm=llm, want_narrative=True,
+                result, _events = analyze(raw, llm=llm, want_narrative=req.llm_draft,
                                           emit=lambda ev: ev_q.put(dict(ev)))
+                result.analysis_id = analysis_id
+                result.input_sha256 = input_sha
+                store.save(config.ANALYSES_DIR, analysis_id, inp, input_sha, result.model_dump())
                 box["result"] = result
+            except InputValidationError as e:
+                box["error"] = "Input rejected — " + "; ".join(e.errors[:8])
             except Exception as e:  # noqa: BLE001 — never kill the stream silently
                 box["error"] = str(e)[:300]
             finally:
@@ -162,7 +179,7 @@ async def analyze_endpoint(req: AnalyzeRequest, request: Request) -> StreamingRe
                 break
             yield f"event: stage\ndata: {json.dumps(ev, ensure_ascii=False)}\n\n"
         if "error" in box:
-            yield f"event: error\ndata: {json.dumps({'error': box['error']})}\n\n"
+            yield f"event: error\ndata: {json.dumps({'error': box['error']}, ensure_ascii=False)}\n\n"
             return
         yield f"event: result\ndata: {json.dumps(box['result'].model_dump(), ensure_ascii=False)}\n\n"
         yield f"event: done\ndata: {json.dumps({'wall_ms': box['wall_ms']})}\n\n"
@@ -171,43 +188,72 @@ async def analyze_endpoint(req: AnalyzeRequest, request: Request) -> StreamingRe
                              headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"})
 
 
+def _record_or_404(analysis_id: str) -> dict:
+    rec = store.load(config.ANALYSES_DIR, analysis_id)
+    if rec is None:
+        raise HTTPException(404, "unknown analysis_id — run the analysis on this server first")
+    return rec
+
+
+@router.get("/analysis/{analysis_id}")
+def get_analysis(analysis_id: str) -> dict:
+    """Stored server result + decisions for one analysis run (used after a page reload)."""
+    rec = _record_or_404(analysis_id)
+    return {"result": rec["result"], "input_sha256": rec["input_sha256"],
+            "result_sha256": rec["result_sha256"], "created_at": rec["created_at"],
+            "decisions": audit_log.for_analysis(analysis_id, path=config.AUDIT_PATH)}
+
+
 @router.post("/decision")
 def decision(dec: DecisionIn) -> dict:
-    # decisions require a prior score in this session-less prototype
-    saved = [r for r in audit_log.tail(500) if r.get("case_id") == dec.case_id]
-    score = saved[0]["score"] if saved else None
-    if score is None:
-        # look up queue score
-        for q in load_queue():
-            if q["case_id"] == dec.case_id and q.get("score") is not None:
-                score = q["score"]
-                break
-    if score is None:
-        score = 0.0
+    """Record an analyst decision on a stored analysis. Score, note checks and
+    model version come from the server record, never from the client."""
+    rec = _record_or_404(dec.analysis_id)
+    analyst, note = dec.analyst.strip(), dec.note.strip()
+    if len(analyst) < 2:
+        raise HTTPException(422, "analyst name is required (self-declared, not authenticated)")
+    if len(note) < 10:
+        raise HTTPException(422, "a justification of at least 10 characters is required")
+    res = rec["result"]
     entry = audit_log.record_decision(
-        case_id=dec.case_id, score=float(score), decision=dec.decision,
-        analyst=dec.analyst, note=dec.note, narrative_check={},
-        model_version=_model_version(), path=config.AUDIT_PATH,
+        case_id=res["case_id"], score=float(res["score"]), decision=dec.decision,
+        analyst=analyst, note=note, narrative_check=res.get("narrative_check", {}),
+        model_version=res.get("model_version", ""), path=config.AUDIT_PATH,
+        analysis_id=rec["analysis_id"], input_sha256=rec["input_sha256"],
+        result_sha256=rec["result_sha256"],
     )
     return {"ok": True, "entry": entry.model_dump()}
 
 
-@router.post("/decision/full")
-def decision_full(payload: dict) -> dict:
-    """Decision attached to a full analysis (used by the investigator UI)."""
-    dec = DecisionIn.model_validate(payload.get("decision", {}))
-    result = payload.get("result") or {}
-    entry = audit_log.record_decision(
-        case_id=dec.case_id,
-        score=float(result.get("score", 0.0)),
-        decision=dec.decision,
-        analyst=dec.analyst,
-        note=dec.note,
-        narrative_check=result.get("narrative_check", {}),
-        model_version=result.get("model_version", _model_version()),
-        path=config.AUDIT_PATH,
-    )
-    return {"ok": True, "entry": entry.model_dump()}
+@router.post("/export")
+def export_bundle(payload: dict) -> dict:
+    """Export package built from the SERVER record of one analysis_id. Any
+    'result' sent by the client is ignored."""
+    from ..core.export import build_export
+    from ..core.scenarios import RULESET_VERSION
+
+    rec = _record_or_404(str(payload.get("analysis_id") or ""))
+    decisions = audit_log.for_analysis(rec["analysis_id"], path=config.AUDIT_PATH)
+    return build_export(input_payload=rec["input"], result=rec["result"],
+                        decision=decisions[-1] if decisions else None,
+                        ruleset_version=RULESET_VERSION, analysis_id=rec["analysis_id"],
+                        input_sha256=rec["input_sha256"], result_sha256=rec["result_sha256"])
+
+
+@router.post("/export/verify")
+def export_verify(bundle: dict) -> dict:
+    """Two separate checks: (1) integrity — stored hashes vs content; (2) match —
+    package vs this server's record for its analysis_id."""
+    from ..core.export import compare_with_record, verify_bundle
+    from ..core.scenarios import RULESET_VERSION
+
+    integrity = verify_bundle(bundle)
+    aid = ((bundle.get("identifiers") or {}).get("analysis_id") if isinstance(bundle, dict) else None) or ""
+    rec = store.load(config.ANALYSES_DIR, aid) if aid else None
+    server = (compare_with_record(bundle, rec, audit_log.for_analysis(aid, path=config.AUDIT_PATH),
+                                  RULESET_VERSION)
+              if aid else {"status": "no_analysis_id", "problems": ["package has no analysis_id"]})
+    return {**integrity, "integrity_ok": integrity["ok"], "server_record": server}
 
 
 @router.get("/audit")
